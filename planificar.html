@@ -1,0 +1,81 @@
+<!-- planificar.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Planificar Actividad – Meirim BBYO</title>
+  <link rel="stylesheet" href="planificar.css" />
+</head>
+<body>
+
+  <!-- Header Meirim -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <img src="images/bbyo.png" alt="Meirim Logo" class="logo" />
+      <nav class="nav">
+        <a href="./index.html">Inicio</a>
+        <a href="./planificar.html">Actividades</a>
+        <a href="./banco.html">Banco de Ideas</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="calendar-container">
+    <div class="header-month">
+      <button id="prevMonth" class="nav-btn">&lt;</button>
+      <span id="monthYear" class="month-year"></span>
+      <button id="nextMonth" class="nav-btn">&gt;</button>
+    </div>
+
+    <table id="calendar"></table>
+
+    <div id="ideaFormContainer" class="form-container" style="display:none">
+      <div class="form-progress">Paso <span id="currentStep">1</span>/3</div>
+    </div>
+    <button id="cancelForm" class="btn-cancel" style="display:none">×</button>
+    <!-- justo después de </table> y antes de cerrar </main> -->
+<div class="legend">
+  <div class="legend-item">
+    <span class="swatch state-no-hay-nadie"></span>
+    No hay nadie para planificar
+  </div>
+  <div class="legend-item">
+    <span class="swatch state-hay-gente-pero-no-necesaria"></span>
+    Hay gente pero no la necesaria
+  </div>
+  <div class="legend-item">
+    <span class="swatch state-ya-hay-gente-no-se-planifico"></span>
+    Ya hay gente pero no se planificó
+  </div>
+  <div class="legend-item">
+    <span class="swatch state-fue-planificada"></span>
+    Fue planificada
+  </div>
+  <div class="legend-item">
+    <span class="swatch state-fue-dada"></span>
+    Planificación entregada
+  </div>
+  <div class="legend-item">
+    <span class="swatch tile-no-activity"></span>
+    Sin actividad
+  </div>
+</div>
+  </main>
+
+  <!-- Footer Meirim -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>Meirim Chapter 1</span>
+      <div class="footer-logos">
+        <img src="images/aza.jpg"  alt="AZA Logo"  />
+        <img src="images/bbg.png" alt="BBG Logo" />
+        <img src="images/bbyo.png" alt="BBYO Logo"/>
+      </div>
+    </div>
+  </footer>
+
+  <script src="planificar.js"></script>
+</body>
+</html>

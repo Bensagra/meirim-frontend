@@ -1,0 +1,357 @@
+/* planificar.css */
+/* Reset y tipografía */
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: sans-serif; color: #333; background: #FCE4EC; min-height:100vh; display:flex; flex-direction:column; }
+
+/* Contenedor central */
+.container { width:90%; max-width:1200px; margin:0 auto; }
+
+/* Header */
+.site-header {
+  background: linear-gradient(90deg, #D81B60, #EC407A, #66BB6A);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.header-inner {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1rem 0;
+}
+.logo { height:48px; }
+.nav a {
+  color:#fff; text-transform:uppercase; margin-left:1.5rem;
+  text-decoration:none; font-weight:600; transition:color .2s;
+}
+.nav a:hover { color:#f0f0f0; }
+
+/* Main calendario */
+.calendar-container {
+  flex:1;
+  max-width:600px; width:90%; margin:2rem auto;
+  background:#fff; border-radius:8px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  padding:1.5rem;
+  position:relative;
+}
+
+/* Mes/Año */
+.header-month {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:1rem;
+}
+.month-year { font-size:1.3rem; font-weight:bold; color:#D81B60; }
+.nav-btn {
+  background:none; border:none; font-size:1.5rem; cursor:pointer;
+  color:#333; transition:color .2s;
+}
+.nav-btn:hover { color:#D81B60; }
+
+/* Calendario tabla */
+#calendar {
+  width:100%; border-collapse:collapse;
+}
+#calendar th, #calendar td {
+  width:14.28%; height:48px; text-align:center;
+  border:1px solid #eee; vertical-align:middle;
+}
+#calendar th { background:#EC407A; color:#fff; }
+#calendar td { background:#f9f9f9; transition:background .2s; cursor: default; }
+#calendar td[data-date] { cursor:pointer; }
+#calendar td[data-date]:hover { background:#fde2e6; }
+
+/* Estados (adaptados) */
+.state-0 { background-color: #a8d0e6; }
+.state-1 { background-color: #c1e1c1; }
+.state-2 { background-color: #f8e9a1; }
+.state-3 { background-color: #f9ccac; }
+.state-4 { background-color: #f08080; }
+.tile-no-activity {
+  background-color: #444; color:#fff;
+}
+
+/* Formulario modal */
+.form-container {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:90%; max-width:320px; background:#fff;
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  border-radius:8px; padding:16px; z-index:10;
+}
+.form-container label { display:flex; flex-direction:column; margin-bottom:8px; }
+.form-container input {
+  margin-top:4px; padding:6px 8px;
+  border:1px solid #ccc; border-radius:4px;
+}
+.form-container .buttons {
+  display:flex; justify-content:flex-end; gap:8px; margin-top:12px;
+}
+.form-container .buttons button {
+  padding:6px 12px; border:none; border-radius:4px;
+  font-weight:bold; cursor:pointer;
+  transition:background .2s;
+}
+#verifyBtn, #toProposalsBtn, #submitBtn, #regSubmitBtn {
+  background-color:#72bf44; color:#fff;
+}
+#noRegBtn, #regCancelBtn {
+  background-color:#ccc; color:#333;
+}
+.btn-cancel {
+  position:absolute; top:8px; right:8px;
+  background:rgba(0,0,0,0.6); color:#fff;
+  border:none; border-radius:50%; width:32px; height:32px;
+  font-size:1.2rem; cursor:pointer; z-index:11;
+}
+.btn-cancel:hover { background:rgba(0,0,0,0.8); }
+
+/* Footer fijo */
+.site-footer {
+  background: linear-gradient(90deg, #2e7d32, #1b5e20);
+  color:#e0f2f1; padding:1rem 0;
+  position:fixed; left:0; bottom:0; width:100%; z-index:1000;
+  box-shadow:0 -4px 8px rgba(0,0,0,0.3);
+}
+.footer-inner {
+  display:flex; flex-wrap:wrap;
+  align-items:center; justify-content:space-between;
+  width:90%; max-width:1200px; margin:0 auto;
+}
+.footer-inner span {
+  font-size:1.25rem; font-weight:600;
+}
+.footer-logos { display:flex; gap:1.5rem; }
+.footer-logos img {
+  height:36px; opacity:.8;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  transition:transform .3s,opacity .3s;
+}
+.footer-logos img:hover {
+  transform:translateY(-4px) scale(1.1); opacity:1;
+}
+
+/* Responsive */
+@media (max-width:640px) {
+  .footer-inner { flex-direction:column; text-align:center; }
+}
+
+/* ——— Estados Meirim ——— */
+#calendar td.state-no-hay-nadie {
+  background-color: #FCE4EC;  /* rosa muy claro */
+  border: 2px solid #F48FB1;  /* rosa suave */
+  color: #880E4F;             /* texto vino oscuro */
+}
+
+#calendar td.state-hay-gente-pero-no-necesaria {
+  background-color: #F8BBD0;  /* rosa claro */
+  border: 2px solid #EC407A;  /* rosa medio */
+  color: #880E4F;             /* texto vino oscuro */
+}
+
+#calendar td.state-ya-hay-gente-no-se-planifico {
+  background-color: #EC407A;  /* rosa vibrante */
+  border: 2px solid #D81B60;  /* rosa Meirim */
+  color: #FFF;                /* texto blanco */
+}
+
+#calendar td.state-fue-planificada {
+  background-color: #C8E6C9;  /* verde muy claro */
+  border: 2px solid #66BB6A;  /* verde suave */
+  color: #1B5E20;             /* texto verde oscuro */
+}
+
+#calendar td.state-fue-dada {
+  background-color: #72BF44;  /* verde Meirim */
+  border: 2px solid #388E3C;  /* verde oscuro */
+  color: #FFF;                /* texto blanco */
+}
+
+/* fallback: sin actividad */
+#calendar td.tile-no-activity {
+  background-color: #EEEEEE;  /* gris claro */
+  border: 2px dashed #BDBDBD; /* gris medio */
+  color: #424242;             /* texto gris oscuro */
+}
+
+/* Leyenda: swatches fuera de la tabla */
+.legend .swatch.state-no-hay-nadie {
+  background-color: #FCE4EC;
+  border: 2px solid #F48FB1;
+}
+.legend .swatch.state-hay-gente-pero-no-necesaria {
+  background-color: #F8BBD0;
+  border: 2px solid #EC407A;
+}
+.legend .swatch.state-ya-hay-gente-no-se-planifico {
+  background-color: #EC407A;
+  border: 2px solid #D81B60;
+}
+.legend .swatch.state-fue-planificada {
+  background-color: #C8E6C9;
+  border: 2px solid #66BB6A;
+}
+.legend .swatch.state-fue-dada {
+  background-color: #72BF44;
+  border: 2px solid #388E3C;
+}
+.legend .swatch.tile-no-activity {
+  background-color: #EEEEEE;
+  border: 2px dashed #BDBDBD;
+}
+
+.swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  border-radius: 3px;
+}
+
+
+/* —– Mejora Formulario Meirim —– */
+.form-container {
+  background: linear-gradient(135deg, #FCE4EC 0%, #C8E6C9 100%);
+  border: 2px solid #D81B60;
+  border-radius: 12px;
+  padding: 24px;
+  width: 320px;
+  max-width: 90%;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: sans-serif;
+}
+
+/* Indicador de pasos */
+.form-container .form-progress {
+  font-size: 0.9rem;
+  color: #880E4F;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* Títulos de sección */
+.form-container h3 {
+  color: #D81B60;
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* Labels e inputs */
+.form-container label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: 500;
+  color: #424242;
+}
+.form-container input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #EC407A;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color .2s, box-shadow .2s;
+}
+.form-container input:focus {
+  outline: none;
+  border-color: #D81B60;
+  box-shadow: 0 0 6px rgba(216,27,96,0.4);
+}
+
+/* Botones */
+.form-container .buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 16px;
+}
+.form-container .buttons button {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+#verifyBtn,
+#toProposalsBtn,
+#submitBtn,
+#regSubmitBtn {
+  background: #72BF44;
+  color: #fff;
+}
+#verifyBtn:hover,
+#toProposalsBtn:hover,
+#submitBtn:hover,
+#regSubmitBtn:hover {
+  background: #388E3C;
+  transform: translateY(-1px);
+}
+#noRegBtn,
+#regCancelBtn {
+  background: #EC407A;
+  color: #fff;
+}
+#noRegBtn:hover,
+#regCancelBtn:hover {
+  background: #D81B60;
+  transform: translateY(-1px);
+}
+
+/* Botón de cerrar */
+.btn-cancel {
+  background: #880E4F;
+  color: #fff;
+  top: 12px; right: 12px;
+}
+.btn-cancel:hover {
+  background: #660B3A;
+}
+
+/* Checkbox y lista de temáticas */
+#propsList label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+#propsList input[type="checkbox"] {
+  margin-right: 8px;
+  width: 16px; height: 16px;
+  accent-color: #D81B60;
+}
+
+/* Contenedor “Otro” */
+#otherDiv {
+  margin-top: 8px;
+}
+
+/* Aseguramos que el contenedor sea relativo y centre su contenido */
+.form-container {
+  position: relative;      /* para que .btn-cancel se ubique respecto a este */
+  text-align: center;      /* centra títulos, párrafos y botones */
+}
+
+/* Pero los label+input los dejamos alineados a la izquierda */
+.form-container label {
+  text-align: left;        /* mantiene la forma limpia */
+}
+
+/* Títulos y textos interiores */
+.form-container h3,
+.form-container p {
+  text-align: center;      /* refuerza el centrado */
+}
+
+/* Ajuste de la “×” de cierre */
+.btn-cancel {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 20;
+}
+
+/* Para que el icono se mantenga fijo al contenedor */
+.form-container .btn-cancel {
+  /* nada más, ya hereda position: absolute sobre el contenedor */
+}
