@@ -188,10 +188,11 @@ async function registerUser() {
   }
 
   try {
+    console.log(JSON.stringify({ name, surname, mail, dni }, null, 2));
     const res = await fetch(`${BASE_URL}/user`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, surname, mail, dni })
+      body: JSON.stringify({ name, surname, email:mail, dni })
     });
     if (!res.ok) throw new Error(`Status ${res.status}`);
 
