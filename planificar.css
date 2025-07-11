@@ -355,3 +355,114 @@ body { font-family: sans-serif; color: #333; background: #FCE4EC; min-height:100
 .form-container .btn-cancel {
   /* nada más, ya hereda position: absolute sobre el contenedor */
 }
+
+
+
+/* Footer mejorado */
+.site-footer {
+  position: relative;
+  background: linear-gradient(135deg, #388E3C 0%, #72BF44 100%);
+  color: #fff;
+  padding: 2.5rem 0;
+  clip-path: polygon(0 8%, 100% 0%, 100% 100%, 0% 100%);
+  overflow: hidden;
+  font-family: sans-serif;
+}
+
+/* Curva decorativa extra (opcional) */
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: #fff;
+  border-radius: 50% 50% 0 0;
+  opacity: 0.15;
+}
+
+/* Contenido del footer */
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Título grande */
+.footer-inner span {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* Logos con efecto hover */
+.footer-logos {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.footer-logos img {
+  height: 40px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)) brightness(1.2);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.footer-logos img:hover {
+  transform: translateY(-6px) scale(1.15);
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6)) brightness(1.4);
+}
+
+/* En pantallas pequeñas, centra todo */
+@media (max-width: 640px) {
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+}
+
+.site-footer {
+  position: relative;
+  /* Degradado 3 colores: rosa fuerte → rosa medio → verde Meirim */
+  background: linear-gradient(135deg, #D81B60 0%, #EC407A 50%, #72BF44 100%);
+  color: #fff;
+  padding: 2.5rem 0;
+  clip-path: polygon(0 8%, 100% 0%, 100% 100%, 0% 100%);
+  overflow: hidden;
+  font-family: sans-serif;
+}
+
+/* Curva decorativa */
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: #fff;
+  border-radius: 50% 50% 0 0;
+  opacity: 0.15;
+}
+
+
+.site-footer {
+  /* Degradado 3 colores: rosa fuerte → rosa medio → verde Meirim */
+  background: linear-gradient(135deg, #D81B60 0%, #EC407A 30%, #72BF44 100%);
+  clip-path: polygon(0 4%, 100% 0%, 100% 100%, 0% 100%);
+  padding: 2rem 0;  /* ligeramente menos alto */
+}
+
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: -40px;      /* menos alto */
+  left: 0;
+  width: 100%;
+  height: 40px;    /* más estrecho */
+  background: #fff;
+  border-radius: 50% 50% 0 0;
+  opacity: 0.1;    /* más tenue */
+}
