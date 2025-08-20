@@ -1,60 +1,109 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Meirim BBYO</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BBYO • Más teens, experiencias más significativas</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="preload" href="images/bbyo.png" as="image">
 </head>
 <body>
   <!-- Header -->
- <header class="site-header">
+  <header class="site-header" role="banner">
     <div class="container header-inner">
-      <img src="images/bbyo.png" alt="Meirim Logo" class="logo" />
-      <nav class="nav">
-        <a href="./index.html">Inicio</a>
-        <a href="./planificar.html">Actividades</a>
-        <a href="./banco.html">Banco de Ideas</a>
+      <a class="brand" href="./index.html" aria-label="BBYO Home">
+        <img src="images/bbyo.png" alt="Logo BBYO" class="logo" />
+        <span class="brand-text">BBYO</span>
+      </a>
+      <nav class="nav" aria-label="Principal">
+        <a href="./index.html" class="nav-link is-active">Inicio</a>
+        <a href="./planificar.html" class="nav-link">Actividades</a>
+        <a href="./banco.html" class="nav-link">Banco de Ideas</a>
+        <a href="https://bbyo.org/become-a-member" class="btn btn-cta" target="_blank" rel="noopener">Unite a BBYO</a>
       </nav>
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
     </div>
   </header>
 
   <!-- Main -->
-  <main class="site-main">
-    <div class="container">
-      <h1>Bienvenidos a Meirim BBYO</h1>
+  <main class="site-main" id="main">
+    <section class="hero">
+      <div class="container hero-inner">
+        <h1>Bienvenidos a <span class="txt-gradient">BBYO</span></h1>
+        <p class="tagline">
+          Capítulos de <strong>AZA</strong> y <strong>BBG</strong> conectando a miles de teens para crear
+          <em>experiencias judías significativas</em>.
+        </p>
 
-      <!-- Carousel -->
-      <div class="carousel" id="carousel">
-        <div class="slides">
-          <img src="images/1.jpeg" alt="Actividad 1" />
-          <img src="images/2.jpeg" alt="Actividad 2" />
-          <img src="images/3.jpeg" alt="Actividad 3" />
-          <img src="images/4.jpeg" alt="Actividad 4" />
+        <!-- Carousel -->
+        <div class="carousel" id="carousel" aria-label="Galería de actividades" tabindex="0">
+          <div class="slides">
+            <img src="images/1.jpeg" alt="Actividad BBYO 1" loading="lazy" />
+            <img src="images/2.jpeg" alt="Actividad BBYO 2" loading="lazy" />
+            <img src="images/3.jpeg" alt="Actividad BBYO 3" loading="lazy" />
+            <img src="images/4.jpeg" alt="Actividad BBYO 4" loading="lazy" />
+          </div>
+          <button class="car-btn prev" aria-label="Anterior">‹</button>
+          <button class="car-btn next" aria-label="Siguiente">›</button>
+          <div class="dots" aria-hidden="true"></div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+          <a href="./planificar.html" class="btn btn-aza">Planificar Actividad</a>
+          <a href="./banco.html" class="btn btn-bbg">Banco de Ideas</a>
         </div>
       </div>
+    </section>
 
-      <!-- Buttons -->
-      <div class="actions">
-        <a href="./planificar.html" class="btn btn-green">Planificar Actividad</a>
-        <a href="./banco.html" class="btn btn-pink">Banco de Ideas</a>
+    <!-- Próximas actividades (desde tu API) -->
+    <section class="upcoming">
+      <div class="container">
+        <div class="section-head">
+          <h2>Próximas actividades</h2>
+          <div class="filters">
+            <label>
+              Chapter:
+              <select id="chapterSelect">
+                <option value="meirim">Meirim</option>
+                <option value="otro-chapter">Otro Chapter</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div id="activitiesGrid" class="cards"></div>
+        <div class="center">
+          <a href="./planificar.html" class="link">Ver todas</a>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Explorar chapters -->
+    <section class="chapters">
+      <div class="container">
+        <h2>Explorá capítulos</h2>
+        <div class="chips">
+          <a class="chip" href="?chapter=meirim">Meirim</a>
+          <a class="chip" href="?chapter=aza">AZA</a>
+          <a class="chip" href="?chapter=bbg">BBG</a>
+          <a class="chip" href="?chapter=argentina">Argentina</a>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- Footer -->
-  <footer class="site-footer">
+  <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
-      <span>Meirim Chapter 1</span>
+      <span>BBYO • Movimiento teen judío internacional</span>
       <div class="footer-logos">
-        <img src="images/aza.jpg"  alt="AZA Logo"  />
-        <img src="images/bbg.png" alt="BBG Logo" />
-        <img src="images/bbyo.png" alt="BBYO Logo"/>
+        <img src="images/aza.jpg" alt="Sello AZA" />
+        <img src="images/bbg.png" alt="Sello BBG" />
+        <img src="images/bbyo.png" alt="Logo BBYO" />
       </div>
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

@@ -1,5 +1,12 @@
 /* planificar.css */
 /* Reset y tipografía */
+ :root{
+      --aza-blue:#1565c0;   /* AZA */
+      --bbg-red:#c62828;    /* BBG */
+      --menorah:#d9b40b;    /* accent */
+      --ink:#1b1f23; --muted:#5b6570; --bg:#f6f8fb;
+      --radius:16px; --shadow:0 8px 24px rgba(0,0,0,.08);
+    }
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family: sans-serif; color: #333; background: #FCE4EC; min-height:100vh; display:flex; flex-direction:column; }
 

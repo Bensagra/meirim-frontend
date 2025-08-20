@@ -1,208 +1,124 @@
-/* style.css */
-/* Reset básico */
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: sans-serif; color: #333; }
-
-/* Contenedor central */
-.container {
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
+/* ===== Variables (paleta BBYO: AZA=azul, BBG=rojo, dorado menorá) ===== */
+:root {
+  --aza-blue: #1565c0;         /* Azul AZA (referencia) */
+  --bbg-red:  #c62828;         /* Rojo BBG (referencia) */
+  --menorah:  #d9b40b;         /* Dorado menorá (acento) */
+  --ink:      #1b1f23;
+  --muted:    #5b6570;
+  --bg-soft:  linear-gradient(180deg,#f5f7fb 0%, #eef7f0 100%);
+  --radius:   16px;
+  --shadow:   0 8px 24px rgba(0,0,0,.08);
 }
 
-/* Header */
+/* Reset básico */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--ink);
+  background: var(--bg-soft);
+  display: flex; flex-direction: column;
+}
+
+.container { width: min(1200px, 92%); margin: 0 auto; }
+
+/* ===== Header ===== */
 .site-header {
-  background: linear-gradient(90deg, #D81B60, #EC407A, #66BB6A);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  background: linear-gradient(90deg, var(--bbg-red), var(--aza-blue));
+  color: #fff;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,.15);
 }
 .header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .85rem 0;
 }
-.header-inner .logo {
-  height: 48px;
-}
-.nav a {
-  color: #fff;
-  text-transform: uppercase;
-  margin-left: 1.5rem;
-  text-decoration: none;
-  font-weight: 600;
-  transition: color .2s;
-}
-.nav a:hover { color: #f0f0f0; }
+.brand { display: flex; align-items: center; gap: .6rem; text-decoration: none; color: #fff; }
+.logo { height: 40px; width: auto; }
+.brand-text { font-weight: 800; letter-spacing: .5px; }
+.nav { display: flex; align-items: center; gap: 1rem; }
+.nav a { color: #fff; text-decoration: none; font-weight: 600; opacity: .95; }
+.nav a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+.nav-link.is-active { text-decoration: underline; text-underline-offset: 4px; }
+.btn-cta { background: #fff; color: var(--aza-blue); padding: .55rem 1rem; border-radius: 999px; font-weight: 800; }
+.btn-cta:hover { filter: brightness(0.95); }
+.nav-toggle { display:none; background:none; border:none; color:#fff; font-size:1.5rem; }
 
-/* Main */
-.site-main {
-  background: linear-gradient(180deg, #FCE4EC, #E8F5E9);
-  padding: 3rem 0;
-  text-align: center;
+/* ===== Hero ===== */
+.hero { padding: 3rem 0 2rem; text-align: center; }
+.hero-inner { display: grid; gap: 1.25rem; }
+h1 { font-size: clamp(2rem, 1.3rem + 2.5vw, 3rem); margin: 0; }
+.txt-gradient {
+  background: linear-gradient(90deg, var(--bbg-red), var(--aza-blue));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-.site-main h1 {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-}
+.tagline { color: var(--muted); font-size: 1.05rem; }
 
-/* Carousel */
-.carousel {
-  position: relative;
-  overflow: hidden;
-  max-width: 800px;
-  margin: 0 auto 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+/* ===== Carousel ===== */
+.carousel { position: relative; overflow: hidden; border-radius: var(--radius); box-shadow: var(--shadow); height: 360px; margin-top: .5rem; }
+.slides { display: flex; height: 100%; transition: transform .55s ease-in-out; }
+.slides img { width: 100%; height: 100%; object-fit: cover; flex: 0 0 100%; }
+.car-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(0,0,0,.35); color: #fff; border: 0; width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center; cursor: pointer;
 }
-.slides {
-  display: flex;
-  width: 400%; /* 4 imágenes */
-  transition: transform .5s ease-in-out;
+.car-btn:hover { background: rgba(0,0,0,.5); }
+.prev { left: 10px; } .next { right: 10px; }
+.dots { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
+.dots::before { content: ""; }
+.dots button {
+  width: 8px; height: 8px; border-radius: 50%; border: 2px solid #fff; background: transparent; opacity: .7; cursor: pointer;
 }
-.slides img {
-  width: 100%;
-  flex-shrink: 0;
-  object-fit: cover;
-  height: 300px;
-}
+.dots button.active { background: #fff; opacity: 1; }
 
-/* Buttons */
-.actions {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
+/* ===== Buttons & actions ===== */
+.actions { display: flex; justify-content: center; gap: .75rem; margin-top: 1.25rem; }
 .btn {
-  display: inline-block;
-  padding: .75rem 1.5rem;
-  border-radius: 9999px;
-  color: #fff;
-  text-decoration: none;
-  font-weight: 600;
-  transition: transform .2s, background .2s;
+  display: inline-block; padding: .8rem 1.25rem; border-radius: 999px; color: #fff; text-decoration: none; font-weight: 700;
+  box-shadow: var(--shadow); transform: translateZ(0); transition: transform .2s ease, filter .2s ease;
 }
-.btn-green { background: #43A047; }
-.btn-green:hover { background: #388E3C; transform: scale(1.05); }
-.btn-pink  { background: #D81B60; }
-.btn-pink:hover  { background: #AD1457; transform: scale(1.05); }
+.btn:hover { transform: translateY(-2px); filter: brightness(.98); }
+.btn-aza { background: var(--aza-blue); }
+.btn-bbg { background: var(--bbg-red); }
 
-/* Footer */
-.site-footer {
-  background: #1B5E20;
-  color: #ECEFF1;
-  padding: 2rem 0;
-}
-.footer-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.footer-inner span {
-  font-size: 1.25rem;
-  font-weight: 700;
-}
-.footer-logos {
-  display: flex;
-  gap: 2rem;
-  margin-top: 1rem;
-}
-.footer-logos img {
-  height: 40px;
-  opacity: .8;
-  transition: opacity .2s;
-}
-.footer-logos img:hover { opacity: 1; }
-
-/* 1. Hacer que body sea flex para empujar el footer */
-html, body {
-  height: 100%;
-}
-body {
-  display: flex;
-  flex-direction: column;
-  /* dejar espacio al footer fijo */
-  padding-bottom: 80px; /* ajustar según la altura de tu footer */
-  margin: 0;
-}
-
-/* 2. Que el main crezca y empuje */
-.site-main {
-  flex: 1;
-}
-
-/* 3. Dar altura fija al carrusel y que la imagen la llene */
-.carousel {
-  height: 400px;        /* o el alto que prefieras */
-  position: relative;
-}
-.slides {
-  display: flex;
-  width: 400%;
-  transition: transform .5s ease-in-out;
-}
-.slides img {
-  width: 25%;
-  height: 80%;
-    object-fit: cover;   /* para que la imagen llene el espacio */
-}
-
-/* 4. Footer siempre abajo */
-.site-footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  /* opcional: asegurar que esté por encima de contenidos */
-  z-index: 999;
-}
-
-/* Mejoras estilo footer */
-.site-footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background: linear-gradient(90deg, #2e7d32, #1b5e20); /* degradado oscuro */
-  color: #e0f2f1;
-  padding: 1rem 0;
-  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
-}
-
-.footer-inner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
+/* ===== Cards: próximas actividades ===== */
+.upcoming { padding: 2.25rem 0; }
+.section-head { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1rem; }
+.section-head h2 { margin:0; font-size:1.5rem; }
+.filters select { padding:.45rem .65rem; border-radius: 10px; border:1px solid #d0d7de; }
+.cards {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1rem;
 }
-
-.footer-inner span {
-  font-size: 1.25rem;
-  font-weight: 600;
+.card {
+  background:#fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 1rem; display:flex; flex-direction:column; gap:.35rem;
+  border: 1px solid #eef2f6;
 }
+.card .date { font-weight: 700; color: var(--aza-blue); }
+.card .meta { font-size:.95rem; color: var(--muted); }
+.link { color: var(--aza-blue); text-decoration: none; font-weight: 700; }
+.center { text-align:center; margin-top:1rem; }
 
-.footer-logos {
-  display: flex;
-  gap: 1.5rem;
+/* ===== Chapters chips ===== */
+.chapters { padding: 1.5rem 0 3rem; }
+.chips { display:flex; flex-wrap:wrap; gap:.5rem; }
+.chip {
+  display:inline-flex; align-items:center; gap:.5rem; padding:.5rem .9rem; border-radius:999px; background:#fff;
+  border:1px solid #e6ebf2; color:var(--ink); text-decoration:none; box-shadow: var(--shadow);
 }
+.chip:hover { border-color:#cfd8e3; }
 
-.footer-logos img {
-  height: 36px;
-  opacity: 0.8;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
+/* ===== Footer ===== */
+.site-footer { margin-top: auto; background: #0f2236; color:#e8eef5; padding: 1.25rem 0; }
+.footer-inner { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+.footer-logos { display:flex; gap: 1rem; align-items:center; }
+.footer-logos img { height: 36px; filter: drop-shadow(0 1px 2px rgba(0,0,0,.25)); }
 
-.footer-logos img:hover {
-  transform: translateY(-4px) scale(1.1);
-  opacity: 1;
-}
-
-/* Responsive: apilar en móviles */
-@media (max-width: 640px) {
-  .footer-inner {
-    flex-direction: column;
-    text-align: center;
-  }
+/* ===== Responsive ===== */
+@media (max-width: 860px) {
+  .nav { display:none; }
+  .nav-toggle { display:block; }
+  .carousel { height: 56vw; max-height: 420px; }
 }

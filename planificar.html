@@ -1,19 +1,20 @@
-<!-- planificar.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Planificar Actividad – Meirim BBYO</title>
-  <link rel="stylesheet" href="planificar.css" />
+  <title>Planificar Actividad · BBYO</title>
+<link rel="stylesheet" href="planificar.css">
 </head>
 <body>
-
-  <!-- Header Meirim -->
+  <!-- Header BBYO -->
   <header class="site-header">
     <div class="container header-inner">
-      <img src="images/bbyo.png" alt="Meirim Logo" class="logo" />
-      <nav class="nav">
+      <a class="brand" href="./index.html" aria-label="BBYO Home">
+        <img src="images/bbyo.png" alt="Logo BBYO" />
+        <span>BBYO</span>
+      </a>
+      <nav class="nav" aria-label="Principal">
         <a href="./index.html">Inicio</a>
         <a href="./planificar.html">Actividades</a>
         <a href="./banco.html">Banco de Ideas</a>
@@ -22,60 +23,258 @@
   </header>
 
   <!-- Main Content -->
-  <main class="calendar-container">
-    <div class="header-month">
-      <button id="prevMonth" class="nav-btn">&lt;</button>
-      <span id="monthYear" class="month-year"></span>
-      <button id="nextMonth" class="nav-btn">&gt;</button>
+  <main class="container calendar-wrap">
+    <div class="topbar">
+      <div class="top-left">
+        <label for="chapterSelect">Chapter:</label>
+        <select id="chapterSelect" class="select">
+          <option value="meirim">Meirim</option>
+          <option value="aza">AZA</option>
+          <option value="bbg">BBG</option>
+          <option value="argentina">Argentina</option>
+        </select>
+      </div>
+      <div class="header-month">
+        <button id="prevMonth" class="nav-btn" aria-label="Mes anterior">‹</button>
+        <span id="monthYear" class="month-year"></span>
+        <button id="nextMonth" class="nav-btn" aria-label="Mes siguiente">›</button>
+      </div>
     </div>
 
-    <table id="calendar"></table>
+    <table id="calendar" aria-label="Calendario de actividades"></table>
 
-    <div id="ideaFormContainer" class="form-container" style="display:none">
-      <div class="form-progress">Paso <span id="currentStep">1</span>/3</div>
+    <div class="legend" aria-hidden="false">
+      <div class="legend-item"><span class="swatch state-no-hay-nadie"></span>No hay nadie para planificar</div>
+      <div class="legend-item"><span class="swatch state-hay-gente-pero-no-necesaria"></span>Hay gente pero no la necesaria</div>
+      <div class="legend-item"><span class="swatch state-ya-hay-gente-no-se-planifico"></span>Ya hay gente pero no se planificó</div>
+      <div class="legend-item"><span class="swatch state-fue-planificada"></span>Fue planificada</div>
+      <div class="legend-item"><span class="swatch state-fue-dada"></span>Planificación entregada</div>
+      <div class="legend-item"><span class="swatch tile-no-activity"></span>Sin actividad</div>
     </div>
-    <button id="cancelForm" class="btn-cancel" style="display:none">×</button>
-    <!-- justo después de </table> y antes de cerrar </main> -->
-<div class="legend">
-  <div class="legend-item">
-    <span class="swatch state-no-hay-nadie"></span>
-    No hay nadie para planificar
-  </div>
-  <div class="legend-item">
-    <span class="swatch state-hay-gente-pero-no-necesaria"></span>
-    Hay gente pero no la necesaria
-  </div>
-  <div class="legend-item">
-    <span class="swatch state-ya-hay-gente-no-se-planifico"></span>
-    Ya hay gente pero no se planificó
-  </div>
-  <div class="legend-item">
-    <span class="swatch state-fue-planificada"></span>
-    Fue planificada
-  </div>
-  <div class="legend-item">
-    <span class="swatch state-fue-dada"></span>
-    Planificación entregada
-  </div>
-  <div class="legend-item">
-    <span class="swatch tile-no-activity"></span>
-    Sin actividad
-  </div>
-</div>
   </main>
 
-  <!-- Footer Meirim -->
+  <!-- Footer -->
   <footer class="site-footer">
     <div class="container footer-inner">
-      <span>Meirim#5618</span>
+      <span>BBYO • Movimiento teen judío internacional</span>
       <div class="footer-logos">
-        <img src="images/aza.png"  alt="AZA Logo"  />
-        <img src="images/bbg.png" alt="BBG Logo" />
-        <img src="images/bbyo.png" alt="BBYO Logo"/>
+        <img src="images/aza.jpg" alt="Sello AZA"/>
+        <img src="images/bbg.png" alt="Sello BBG"/>
+        <img src="images/bbyo.png" alt="Logo BBYO"/>
       </div>
     </div>
   </footer>
 
-  <script src="planificar.js"></script>
+  <!-- Modal / Form -->
+  <div id="ideaFormContainer" class="form-container" role="dialog" aria-modal="true">
+    <div class="form-card" id="formCard">
+      <button class="btn-close" id="cancelForm" aria-label="Cerrar">×</button>
+      <div class="form-progress">Paso <span id="currentStep">1</span>/2</div>
+      <div id="formContent"></div>
+    </div>
+  </div>
+
+  <script>
+    // ====== CONFIG ======
+    // Usá relativo si deployás frontend junto al backend (ej: /api)
+    const BASE_URL = '/api';
+    const ACTIVITIES_API = `${BASE_URL}/activities`;
+    const USERS_API = `${BASE_URL}/users`;
+    // Primero intentamos /tematicas, fallback a /propuestas si tu backend viejo lo usa
+    async function fetchTematicas(chapterSlug){
+      const tryOne = async (url)=>{ const r=await fetch(url); if(!r.ok) throw new Error('x'); return r.json(); };
+      try { return await tryOne(`${BASE_URL}/tematicas?chapterSlug=${chapterSlug}&usada=false`); }
+      catch { try { return await tryOne(`${BASE_URL}/propuestas?chapterSlug=${chapterSlug}`); } catch { return []; } }
+    }
+
+    // ====== DOM ======
+    const calendarEl = document.getElementById('calendar');
+    const monthYearEl = document.getElementById('monthYear');
+    const formOverlay = document.getElementById('ideaFormContainer');
+    const formContent = document.getElementById('formContent');
+    const stepEl = document.getElementById('currentStep');
+    const closeBtn = document.getElementById('cancelForm');
+    const chapterSelect = document.getElementById('chapterSelect');
+
+    // Estado
+    let activitiesMap = {}; let currentActivity = null; let userDni = '';
+    const today = new Date(); let currentMonth = today.getMonth(); let currentYear = today.getFullYear();
+    const statusClasses = {
+      NO_HAY_NADIE: 'state-no-hay-nadie',
+      HAY_GENTE_PERO_NO_NECESARIA: 'state-hay-gente-pero-no-necesaria',
+      YA_HAY_GENTE_PERO_NO_SE_PLANIFICO: 'state-ya-hay-gente-no-se-planifico',
+      FUE_PLANIFICADA: 'state-fue-planificada',
+      FUE_DADA_LA_PLANIFICACION: 'state-fue-dada'
+    };
+    const noActivityClass = 'tile-no-activity';
+
+    // Init chapter from URL ?chapterSlug=...
+    (function syncChapterFromQuery(){
+      const u = new URL(window.location.href);
+      const s = u.searchParams.get('chapterSlug');
+      if(s){ const opt = Array.from(chapterSelect.options).find(o=>o.value===s); if(opt) chapterSelect.value = s; }
+    })();
+
+    // ====== API ======
+    async function loadActivities(){
+      const ch = chapterSelect.value;
+      try{
+        const url = new URL(ACTIVITIES_API, window.location.origin);
+        url.searchParams.set('chapterSlug', ch);
+        const res = await fetch(url.toString());
+        const data = await res.json();
+        const list = Array.isArray(data) ? data : (data.items||[]);
+        activitiesMap = {};
+        list.forEach(act=>{
+          const d = new Date(act.fecha);
+          const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+          activitiesMap[iso] = act;
+        });
+      }catch(e){ activitiesMap = {}; }
+    }
+
+    // ====== RENDER CALENDAR ======
+    function renderCalendar(year, month){
+      const days=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+      const firstDow = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month+1, 0).getDate();
+      let html = '<thead><tr>'+days.map(d=>`<th>${d}</th>`).join('')+'</tr></thead><tbody>';
+      let dateNum=1;
+      for(let w=0; w<6; w++){
+        html += '<tr>';
+        for(let dow=0; dow<7; dow++){
+          if((w===0 && dow<firstDow) || dateNum>daysInMonth){ html += '<td></td>'; }
+          else{
+            const iso = `${year}-${String(month+1).padStart(2,'0')}-${String(dateNum).padStart(2,'0')}`;
+            const act = activitiesMap[iso];
+            const cls = act ? (statusClasses[act.estado] || noActivityClass) : noActivityClass;
+            html += `<td data-date="${iso}" class="${cls}" aria-label="${iso}">${dateNum}</td>`;
+            dateNum++;
+          }
+        }
+        html += '</tr>';
+        if(dateNum>daysInMonth) break;
+      }
+      html += '</tbody>';
+      calendarEl.innerHTML = html;
+      monthYearEl.textContent = `${['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][month]} ${year}`;
+
+      calendarEl.querySelectorAll('td[data-date]').forEach(td=>{
+        const d = td.dataset.date; if(activitiesMap[d]) td.onclick = ()=> openDniForm(d);
+      });
+    }
+
+    // ====== NAV MONTHS ======
+    document.getElementById('prevMonth').addEventListener('click',()=>{ if(currentMonth===0){currentMonth=11;currentYear--}else currentMonth--; renderCalendar(currentYear,currentMonth); });
+    document.getElementById('nextMonth').addEventListener('click',()=>{ if(currentMonth===11){currentMonth=0;currentYear++}else currentMonth++; renderCalendar(currentYear,currentMonth); });
+
+    chapterSelect.addEventListener('change', async ()=>{ await init(); });
+
+    // ====== FORMS ======
+    function openOverlay(){ formOverlay.style.display='flex'; }
+    function closeOverlay(){ formOverlay.style.display='none'; formContent.innerHTML=''; userDni=''; currentActivity=null; }
+    closeBtn.addEventListener('click', closeOverlay);
+
+    function openDniForm(date){
+      currentActivity = activitiesMap[date];
+      stepEl.textContent = '1';
+      formContent.innerHTML = `
+        <h3>Actividad ${date}</h3>
+        <p>Ingresá tu DNI para inscribirte en esta actividad.</p>
+        <label for="dniInput">DNI</label>
+        <input id="dniInput" inputmode="numeric" autocomplete="off" />
+        <div class="buttons">
+          <button class="btn btn-secondary" id="btn-register">Registrar</button>
+          <button class="btn btn-primary" id="btn-verify">Verificar</button>
+        </div>`;
+      openOverlay();
+      document.getElementById('btn-verify').addEventListener('click', verifyDni);
+      document.getElementById('btn-register').addEventListener('click', showRegisterForm);
+    }
+
+    async function verifyDni(){
+      const dni = document.getElementById('dniInput').value.trim();
+      if(!dni) return alert('Ingresá tu DNI.');
+      try{
+        const ch = chapterSelect.value;
+        const res = await fetch(`${USERS_API}/${encodeURIComponent(dni)}?chapterSlug=${encodeURIComponent(ch)}`);
+        if(res.ok){ userDni = dni; openTopicsForm(); }
+        else if(res.status===404){ alert('DNI no encontrado; registrate primero.'); showRegisterForm(); }
+        else throw new Error('verify error');
+      }catch{ alert('Error al verificar. Probá de nuevo.'); }
+    }
+
+    function showRegisterForm(){
+      stepEl.textContent = '1';
+      formContent.innerHTML = `
+        <h3>Registro de Usuario</h3>
+        <label>Nombre<input id="regName" /></label>
+        <label>Apellido<input id="regSurname" /></label>
+        <label>Email<input id="regMail" type="email"/></label>
+        <label>DNI<input id="regDni" /></label>
+        <div class="buttons">
+          <button class="btn btn-secondary" id="reg-cancel">Cancelar</button>
+          <button class="btn btn-primary" id="reg-submit">Registrar</button>
+        </div>`;
+      document.getElementById('reg-cancel').addEventListener('click', ()=> openDniForm(currentActivity.fecha.substr(0,10)) );
+      document.getElementById('reg-submit').addEventListener('click', registerUser);
+    }
+
+    async function registerUser(){
+      const name = document.getElementById('regName').value.trim();
+      const surname = document.getElementById('regSurname').value.trim();
+      const email = document.getElementById('regMail').value.trim();
+      const dni = document.getElementById('regDni').value.trim();
+      if(!name||!surname||!email||!dni) return alert('Completá todos los campos.');
+      try{
+        const ch = chapterSelect.value;
+        const res = await fetch(USERS_API, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ name, surname, email, dni, chapterSlug: ch }) });
+        if(!res.ok) throw new Error('register error');
+        alert('¡Registro exitoso!'); userDni = dni; openTopicsForm();
+      }catch{ alert('Error al registrar. Probá nuevamente.'); }
+    }
+
+    async function openTopicsForm(){
+      stepEl.textContent = '2';
+      formContent.innerHTML = `
+        <h3>Seleccioná temáticas</h3>
+        <div id="propsList">Cargando…</div>
+        <div class="buttons">
+          <button class="btn btn-accent" id="submitBtn">Enviar</button>
+        </div>`;
+      // cargar temáticas del chapter
+      const ch = chapterSelect.value;
+      try{
+        const props = await fetchTematicas(ch);
+        const list = Array.isArray(props.items)? props.items : props;
+        const box = document.getElementById('propsList');
+        let html='';
+        list.forEach(p=>{ const label = p.tematica || p.label || ''; if(label) html += `<label><input type="checkbox" name="prop" value="${label}"> ${label}</label>`; });
+        html += `<label style="margin-top:.5rem"><input type="checkbox" id="otherChk"> Otro…</label>
+                 <div id="otherDiv" style="display:none;margin-top:.4rem"><input id="otherInput" placeholder="Nueva temática" /></div>`;
+        box.innerHTML = html || '<p class="muted">No hay temáticas disponibles.</p>';
+        const otherChk = document.getElementById('otherChk'); if(otherChk) otherChk.addEventListener('change', e=>{ document.getElementById('otherDiv').style.display = e.target.checked ? 'block':'none'; });
+        document.getElementById('submitBtn').addEventListener('click', submitActivityUpdate);
+      }catch(e){ document.getElementById('propsList').innerHTML = '<p>Error al cargar temáticas.</p>'; }
+    }
+
+    async function submitActivityUpdate(){
+      const sel = Array.from(document.querySelectorAll('input[name="prop"]:checked')).map(cb=>cb.value);
+      const otherChk = document.getElementById('otherChk');
+      if(otherChk && otherChk.checked){ const o = document.getElementById('otherInput').value.trim(); if(o) sel.push(o); }
+      if(sel.length===0) return alert('Elegí al menos una temática.');
+
+      const body = { participants:[userDni], topics: sel };
+      try{
+        const res = await fetch(`${ACTIVITIES_API}/${currentActivity.id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+        if(!res.ok) throw new Error('update error');
+        alert('¡Inscripción guardada!'); closeOverlay(); await init();
+      }catch{ alert('Error al guardar. Intentá de nuevo.'); }
+    }
+
+    // ====== INIT ======
+    async function init(){ await loadActivities(); renderCalendar(currentYear, currentMonth); }
+    init();
+  </script>
 </body>
 </html>
