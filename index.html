@@ -2,64 +2,40 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-<<<<<<< HEAD
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BBYO • Más teens, experiencias más significativas</title>
-=======
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="theme-color" content="#72bf44"/>
   <title>Meirim BBYO</title>
->>>>>>> f81a0fa (feat: Implement PenPals and Shop pages with countdown functionality and enhanced UI)
   <link rel="stylesheet" href="style.css" />
-  <link rel="preload" href="images/bbyo.png" as="image">
 </head>
 <body>
   <!-- Header -->
   <header class="site-header" role="banner">
     <div class="container header-inner">
-      <a class="brand" href="./index.html" aria-label="BBYO Home">
-        <img src="images/bbyo.png" alt="Logo BBYO" class="logo" />
-        <span class="brand-text">BBYO</span>
+      <a href="./index.html" class="brand" aria-label="Inicio Meirim BBYO">
+        <img src="images/bbyo.png" alt="Meirim BBYO" class="logo" />
       </a>
-      <nav class="nav" aria-label="Principal">
-        <a href="./index.html" class="nav-link is-active">Inicio</a>
-        <a href="./planificar.html" class="nav-link">Actividades</a>
-        <a href="./banco.html" class="nav-link">Banco de Ideas</a>
-        <a href="https://bbyo.org/become-a-member" class="btn btn-cta" target="_blank" rel="noopener">Unite a BBYO</a>
+
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-nav">
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+      </button>
+
+      <nav class="nav" id="primary-nav" role="navigation">
+        <a href="./index.html">Inicio</a>
+        <a href="./planificar.html">Actividades</a>
+        <a href="./banco.html">Banco de Ideas</a>
+        <a href="./penpals.html">PenPals</a>
+        <a href="./tienda.html">Tienda</a>
       </nav>
-      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
     </div>
   </header>
 
   <!-- Main -->
-  <main class="site-main" id="main">
-    <section class="hero">
-      <div class="container hero-inner">
-        <h1>Bienvenidos a <span class="txt-gradient">BBYO</span></h1>
-        <p class="tagline">
-          Capítulos de <strong>AZA</strong> y <strong>BBG</strong> conectando a miles de teens para crear
-          <em>experiencias judías significativas</em>.
-        </p>
+  <main class="site-main">
+    <div class="container">
+      <h1>Bienvenidos a Meirim BBYO</h1>
 
-<<<<<<< HEAD
-        <!-- Carousel -->
-        <div class="carousel" id="carousel" aria-label="Galería de actividades" tabindex="0">
-          <div class="slides">
-            <img src="images/1.jpeg" alt="Actividad BBYO 1" loading="lazy" />
-            <img src="images/2.jpeg" alt="Actividad BBYO 2" loading="lazy" />
-            <img src="images/3.jpeg" alt="Actividad BBYO 3" loading="lazy" />
-            <img src="images/4.jpeg" alt="Actividad BBYO 4" loading="lazy" />
-          </div>
-          <button class="car-btn prev" aria-label="Anterior">‹</button>
-          <button class="car-btn next" aria-label="Siguiente">›</button>
-          <div class="dots" aria-hidden="true"></div>
-        </div>
-
-        <!-- Actions -->
-        <div class="actions">
-          <a href="./planificar.html" class="btn btn-aza">Planificar Actividad</a>
-          <a href="./banco.html" class="btn btn-bbg">Banco de Ideas</a>
-=======
       <!-- Carousel -->
       <div class="carousel" id="carousel" role="region" aria-label="Galería de actividades">
         <div class="slides" data-slide-count="4">
@@ -77,44 +53,9 @@
           <button class="dot" aria-label="Ir a la diapositiva 2" aria-selected="false" data-index="1"></button>
           <button class="dot" aria-label="Ir a la diapositiva 3" aria-selected="false" data-index="2"></button>
           <button class="dot" aria-label="Ir a la diapositiva 4" aria-selected="false" data-index="3"></button>
->>>>>>> f81a0fa (feat: Implement PenPals and Shop pages with countdown functionality and enhanced UI)
         </div>
       </div>
-    </section>
 
-<<<<<<< HEAD
-    <!-- Próximas actividades (desde tu API) -->
-    <section class="upcoming">
-      <div class="container">
-        <div class="section-head">
-          <h2>Próximas actividades</h2>
-          <div class="filters">
-            <label>
-              Chapter:
-              <select id="chapterSelect">
-                <option value="meirim">Meirim</option>
-                <option value="otro-chapter">Otro Chapter</option>
-              </select>
-            </label>
-          </div>
-        </div>
-        <div id="activitiesGrid" class="cards"></div>
-        <div class="center">
-          <a href="./planificar.html" class="link">Ver todas</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Explorar chapters -->
-    <section class="chapters">
-      <div class="container">
-        <h2>Explorá capítulos</h2>
-        <div class="chips">
-          <a class="chip" href="?chapter=meirim">Meirim</a>
-          <a class="chip" href="?chapter=aza">AZA</a>
-          <a class="chip" href="?chapter=bbg">BBG</a>
-          <a class="chip" href="?chapter=argentina">Argentina</a>
-=======
       <!-- CTAs -->
       <div class="actions">
         <a href="./planificar.html" class="btn btn-green">Planificar Actividad</a>
@@ -197,30 +138,23 @@
               <span class="pill pill-primary">Próximamente</span>
             </div>
           </article>
->>>>>>> f81a0fa (feat: Implement PenPals and Shop pages with countdown functionality and enhanced UI)
         </div>
       </div>
     </section>
   </main>
 
   <!-- Footer -->
-  <footer class="site-footer" role="contentinfo">
+  <footer class="site-footer">
     <div class="container footer-inner">
-      <span>BBYO • Movimiento teen judío internacional</span>
+      <span>Meirim Chapter 1</span>
       <div class="footer-logos">
-<<<<<<< HEAD
-        <img src="images/aza.jpg" alt="Sello AZA" />
-        <img src="images/bbg.png" alt="Sello BBG" />
-        <img src="images/bbyo.png" alt="Logo BBYO" />
-=======
         <img src="images/aza.jpg"  alt="AZA Logo" />
         <img src="images/bbg.png" alt="BBG Logo" />
         <img src="images/bbyo.png" alt="BBYO Logo"/>
->>>>>>> f81a0fa (feat: Implement PenPals and Shop pages with countdown functionality and enhanced UI)
       </div>
     </div>
   </footer>
 
-  <script src="script.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>
