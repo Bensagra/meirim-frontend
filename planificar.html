@@ -22,7 +22,7 @@
 
       <nav class="nav" id="primary-nav" role="navigation">
         <a href="./index.html">Inicio</a>
-        <a href="./planificar.html">Actividades</a>
+        <a href="./planificar.html" aria-current="page">Actividades</a>
         <a href="./banco.html">Banco de Ideas</a>
         <a href="./index.html#penpals">PenPals</a>
         <a href="./index.html#tienda">Tienda</a>
@@ -30,66 +30,27 @@
     </div>
   </header>
 
- <!-- ... head/header iguales ... -->
-<main class="site-main">
-  <div class="container">
-    <h1>Planificación de actividades</h1>
-    <p class="section-subtitle">Definí fecha, participantes, temáticas y estado.</p>
+  <main class="site-main">
+    <div class="container">
+      <h1>Planificación de actividades</h1>
+      <p class="section-subtitle">Elegí una actividad próxima, sumate como planificador/a y proponé un tópico.</p>
 
-    <div class="grid-2">
       <section class="card">
-        <h2 class="card-title">Nueva / Editar actividad</h2>
-        <form class="form" id="form-actividad">
-          <div class="form-row">
-            <label for="fecha">Fecha y hora</label>
-            <input type="datetime-local" id="fecha" required />
-          </div>
-          <div class="form-row">
-            <label for="estado">Estado</label>
-            <select id="estado">
-              <option value="NO_HAY_NADIE">No hay nadie</option>
-              <option value="HAY_GENTE_PERO_NO_NECESARIA">Hay gente, no la necesaria</option>
-              <option value="YA_HAY_GENTE_PERO_NO_SE_PLANIFICO">Hay gente, falta planificar</option>
-              <option value="FUE_PLANIFICADA">Planificada</option>
-              <option value="FUE_DADA_LA_PLANIFICACION">Planificación dada</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label for="participantes">Participantes (IDs o nombres)</label>
-            <input id="participantes" placeholder="1,2,3 o Ana, Juan..." />
-          </div>
-          <div class="form-row">
-            <label for="tematicas">Temáticas (IDs o títulos)</label>
-            <input id="tematicas" placeholder="5,7 o Liderazgo..." />
-          </div>
-          <div class="form-row">
-            <label for="notas">Notas</label>
-            <textarea id="notas" rows="4"></textarea>
-          </div>
-          <div class="actions left">
-            <button class="btn btn-green" type="submit">Guardar</button>
-            <button class="btn" type="reset">Limpiar</button>
-          </div>
-        </form>
+        <h2 class="card-title">Próximas actividades</h2>
+        <ul class="activity-list" id="proximas-list" aria-live="polite">
+          <!-- Render dinámico -->
+        </ul>
       </section>
 
-      <section>
-        <div class="card">
-          <h2 class="card-title">Próximas actividades</h2>
-          <ul class="list" id="proximas-list"></ul>
-        </div>
-        <div class="legend">
-          <span class="pill pill-danger">No hay nadie</span>
-          <span class="pill pill-warn">Hay gente, no la necesaria</span>
-          <span class="pill pill-info">Hay gente, falta planificar</span>
-          <span class="pill pill-primary">Planificada</span>
-          <span class="pill pill-success">Planificación dada</span>
-        </div>
-      </section>
+      <div class="legend">
+        <span class="pill pill-danger">No hay nadie</span>
+        <span class="pill pill-warn">Hay gente, no la necesaria</span>
+        <span class="pill pill-info">Hay gente, falta planificar</span>
+        <span class="pill pill-primary">Planificada</span>
+        <span class="pill pill-success">Planificación dada</span>
+      </div>
     </div>
-  </div>
-</main>
-<!-- ... footer + script.js ... -->
+  </main>
 
   <footer class="site-footer">
     <div class="container footer-inner">
@@ -102,6 +63,63 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <!-- Modal Planificar -->
+  <!-- Modal Planificar -->
+  <div class="modal" id="plan-modal" aria-hidden="true" role="dialog" aria-labelledby="plan-modal-title">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card" role="document">
+      <button class="modal-close" id="plan-close" aria-label="Cerrar">×</button>
+      <h3 class="modal-title" id="plan-modal-title">Planificar actividad</h3>
+      <p class="small muted" id="plan-modal-when"></p>
+
+      <!-- Paso A: DNI + tópico -->
+      <form class="form" id="plan-form">
+        <div class="form-row">
+          <label for="dni">DNI</label>
+          <input id="dni" required placeholder="Tu DNI" />
+        </div>
+
+        <div class="form-row">
+          <label for="topic">Tópico</label>
+          <select id="topic"></select>
+          <label class="small"><input type="checkbox" id="topic-other"> Proponer un tópico propio</label>
+          <input id="topic-text" class="input" placeholder="Escribí tu tópico" style="display:none"/>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-green">Guardar</button>
+          <button type="button" class="btn" id="plan-cancel">Cancelar</button>
+        </div>
+      </form>
+
+      <!-- Paso B: Registro de usuario (se muestra sólo si DNI no existe) -->
+      <form class="form" id="register-form" style="display:none;">
+        <p class="small muted">No encontramos tu DNI. Registrate para continuar.</p>
+        <div class="form-row">
+          <label for="regName">Nombre</label>
+          <input id="regName" required />
+        </div>
+        <div class="form-row">
+          <label for="regSurname">Apellido</label>
+          <input id="regSurname" required />
+        </div>
+        <div class="form-row">
+          <label for="regMail">Email</label>
+          <input id="regMail" type="email" required />
+        </div>
+        <div class="form-row">
+          <label for="regDni">DNI</label>
+          <input id="regDni" required />
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn btn-green">Crear usuario</button>
+          <button type="button" class="btn" id="reg-cancel">Volver</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Usá un JS separado para esta página -->
+  <script src="planificar.js"></script>
 </body>
 </html>

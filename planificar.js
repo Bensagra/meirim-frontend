@@ -1,250 +1,367 @@
-// script.js
-
+// planificar.js
 const BASE_URL       = 'https://meirim-backend.vercel.app';
 const ACTIVITIES_API = `${BASE_URL}/actividades`;
 const PROPOSALS_API  = `${BASE_URL}/propuestas`;
+const USER_API       = `${BASE_URL}/user`;
 
-const calendarEl    = document.getElementById('calendar');
-const monthYearEl   = document.getElementById('monthYear');
-const formContainer = document.getElementById('ideaFormContainer');
-const cancelBtn     = document.getElementById('cancelForm');
+const listEl        = document.getElementById('proximas-list');
+const modalEl       = document.getElementById('plan-modal');
+const modalWhenEl   = document.getElementById('plan-modal-when');
 
-let activitiesMap   = {};
-let currentActivity = null;
-let userDni         = '';   // guardamos el DNI validado
+const formEl        = document.getElementById('plan-form');
+const dniEl         = document.getElementById('dni');
+const topicSelEl    = document.getElementById('topic');
+const topicOtherCk  = document.getElementById('topic-other');
+const topicTextEl   = document.getElementById('topic-text');
+const closeBtn      = document.getElementById('plan-close');
+const cancelBtn     = document.getElementById('plan-cancel');
 
-const today        = new Date();
-let   currentMonth = today.getMonth();
-let   currentYear  = today.getFullYear();
+const regFormEl     = document.getElementById('register-form');
+const regNameEl     = document.getElementById('regName');
+const regSurnameEl  = document.getElementById('regSurname');
+const regMailEl     = document.getElementById('regMail');
+const regDniEl      = document.getElementById('regDni');
+const regCancelBtn  = document.getElementById('reg-cancel');
 
-const statusClasses = {
-  NO_HAY_NADIE:                      'state-no-hay-nadie',
-  HAY_GENTE_PERO_NO_NECESARIA:       'state-hay-gente-pero-no-necesaria',
-  YA_HAY_GENTE_PERO_NO_SE_PLANIFICO: 'state-ya-hay-gente-no-se-planifico',
-  FUE_PLANIFICADA:                   'state-fue-planificada',
-  FUE_DADA_LA_PLANIFICACION:         'state-fue-dada'
+const statusPillMap = {
+  NO_HAY_NADIE:                      'pill-danger',
+  HAY_GENTE_PERO_NO_NECESARIA:       'pill-warn',
+  YA_HAY_GENTE_PERO_NO_SE_PLANIFICO: 'pill-info',
+  FUE_PLANIFICADA:                   'pill-primary',
+  FUE_DADA_LA_PLANIFICACION:         'pill-success'
 };
-const noActivityClass = 'tile-no-activity';
 
-// — INIT —
-async function init() {
-  await loadActivities();
-  renderCalendar(currentYear, currentMonth);
+let upcoming = [];
+let proposals = [];
+let currentActivity = null;
+
+// Init
+init().catch(console.error);
+
+async function init(){
+  [upcoming, proposals] = await Promise.all([fetchUpcomingActivities(), fetchProposals()]);
+  renderUpcoming(upcoming);
+  wireModal();
 }
-init();
 
-// — CARGA ACTIVIDADES —
-async function loadActivities() {
+async function fetchUpcomingActivities(){
   try {
-    const res  = await fetch(ACTIVITIES_API);
+    const res = await fetch(ACTIVITIES_API);
     const data = await res.json();
-    activitiesMap = {};
-    data.forEach(act => {
-      const d   = new Date(act.fecha);
-      const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-      activitiesMap[iso] = act;
-    });
-  } catch {
-    activitiesMap = {};
+
+    const now = new Date();
+    const items = (data || [])
+      .map(normalizeActivity)
+      .filter(a => a.fecha && a.fecha >= new Date(now.getFullYear(), now.getMonth(), now.getDate()))
+      .sort((a,b) => a.fecha - b.fecha)
+      .slice(0, 12);
+
+    return items;
+  } catch (e){
+    console.error('Error fetch activities', e);
+    return [];
   }
 }
 
-// — RENDER CALENDARIO —
-function renderCalendar(year, month) {
-  const days        = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-  const firstDow    = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month+1, 0).getDate();
+function normalizeActivity(a){
+  // fuerza 18:20 y normaliza arrays a lo que consume el front
+  const fecha = fixTime1820(a?.fecha);
 
-  let html = '<thead><tr>' + days.map(d=>`<th>${d}</th>`).join('') + '</tr></thead><tbody>';
-  let dateNum = 1;
+  // participants viene como ActivityUser[] con include { user: true }
+  // lo reducimos a un array de objetos Usuario [{name,surname,dni,...}]
+  const participants = Array.isArray(a?.participants)
+    ? a.participants.map(p => p?.user).filter(Boolean)
+    : [];
 
-  for (let w=0; w<6; w++) {
-    html += '<tr>';
-    for (let dow=0; dow<7; dow++) {
-      if ((w===0 && dow<firstDow) || dateNum>daysInMonth) {
-        html += '<td></td>';
-      } else {
-        const iso = `${year}-${String(month+1).padStart(2,'0')}-${String(dateNum).padStart(2,'0')}`;
-        const act = activitiesMap[iso];
-        const cls = act ? (statusClasses[act.estado] || noActivityClass) : noActivityClass;
-        html += `<td data-date="${iso}" class="${cls}">${dateNum}</td>`;
-        dateNum++;
-      }
-    }
-    html += '</tr>';
-    if (dateNum>daysInMonth) break;
+  // tematicas viene como ActivityTematica[] con include { tematica: true }
+  // lo reducimos a un array de strings con el nombre de la temática
+  const topics = Array.isArray(a?.tematicas)
+    ? a.tematicas
+        .map(t => (t?.tematica && (t.tematica.tematica || t.tematica.name || t.tematica.titulo || t.tematica.title)) || t?.tematica)
+        .filter(Boolean)
+    : (Array.isArray(a?.topics) ? a.topics : []);
+
+  return {
+    ...a,
+    fecha,
+    participants,
+    topics,
+    estado: a?.estado || 'NO_HAY_NADIE'
+  };
+}
+
+async function fetchProposals(){
+  try{
+    const res = await fetch(PROPOSALS_API);
+    const data = await res.json();
+    return (data || []).map(p => p.tematica || p).filter(Boolean);
+  }catch(e){
+    console.error('Error fetch proposals', e);
+    return [];
   }
-  html += '</tbody>';
+}
 
-  calendarEl.innerHTML = html;
-  monthYearEl.textContent =
-    `${['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-       'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][month]} ${year}`;
+function renderUpcoming(items){
+  if (!items.length){
+    listEl.innerHTML = `<li class="list-item">No hay próximas actividades cargadas.</li>`;
+    return;
+  }
+  listEl.innerHTML = items.map(act => {
+    const when = formatDateTime(act.fecha); // ya tiene 18:20 fijado
+    const pillClass = statusPillMap[act.estado] || 'pill-info';
 
-  calendarEl.querySelectorAll('td[data-date]').forEach(td => {
-    const d = td.dataset.date;
-    if (activitiesMap[d]) td.onclick = () => openDniForm(d);
+    const displayNames = (act.participants || []).map(u => {
+      if (u && typeof u === 'object') {
+        const full = [u.name, u.surname].filter(Boolean).join(' ').trim();
+        return full || u.dni || '[usuario]';
+      }
+      return String(u);
+    });
+
+    const names = displayNames.slice(0,3).join(', ');
+    const extra = displayNames.length > 3 ? ` +${displayNames.length-3}` : '';
+    const planners = displayNames.length ? `${names}${extra}` : '—';
+
+    return `
+      <li class="activity-item">
+        <div class="activity-info">
+          <div class="activity-when">${when}</div>
+          <div class="activity-meta">
+            <span class="pill ${pillClass}">${labelEstado(act.estado)}</span>
+            <span class="activity-planners"><strong>Planifican:</strong> ${escapeHtml(planners)}</span>
+          </div>
+        </div>
+        <div class="activity-actions">
+          <button class="btn btn-green" data-plan="${act.id}">Planificar acá</button>
+        </div>
+      </li>
+    `;
+  }).join('');
+
+  listEl.querySelectorAll('button[data-plan]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-plan');
+      const act = upcoming.find(a => String(a.id) === String(id));
+      if (act) openModal(act);
+    });
   });
 }
 
-// — NAVEGACIÓN MESES —
-document.getElementById('prevMonth').addEventListener('click', () => {
-  if (currentMonth === 0) { currentMonth = 11; currentYear--; }
-  else currentMonth--;
-  renderCalendar(currentYear, currentMonth);
-});
-document.getElementById('nextMonth').addEventListener('click', () => {
-  if (currentMonth === 11) { currentMonth = 0; currentYear++; }
-  else currentMonth++;
-  renderCalendar(currentYear, currentMonth);
-});
+function openModal(activity){
+  currentActivity = activity;
+  modalWhenEl.textContent = formatDateTime(activity.fecha); // muestra 18:20 fijo
 
-// — CERRAR FORM —
-cancelBtn.addEventListener('click', closeForm);
+  // tópicos no usados
+  const used = new Set((activity.topics || []).map(t => String(t).toLowerCase()));
+  const options = proposals.filter(t => !used.has(String(t).toLowerCase()));
+  topicSelEl.innerHTML = options.length
+    ? options.map(t => `<option value="${escapeAttr(t)}">${escapeHtml(t)}</option>`).join('')
+    : `<option value="" disabled selected>No hay tópicos libres — usá “propio”.</option>`;
 
-// — PASO 1: DNI / Registro —
-function openDniForm(date) {
-  currentActivity = activitiesMap[date];
-  userDni = '';  
-  formContainer.innerHTML = `
-    <div id="step1">
-      <h3>Actividad ${date}</h3>
-      <p>Ingresa tu DNI para inscribirte</p>
-      <label>DNI: <input id="dniInput" /></label>
-      <div class="buttons">
-        <button id="verifyBtn">Verificar</button>
-        <button id="noRegBtn">Registrar</button>
-      </div>
-    </div>`;
-  formContainer.style.display = 'flex';
-  cancelBtn.style.display    = 'block';
+  topicOtherCk.checked = false;
+  topicTextEl.style.display = 'none';
+  topicTextEl.value = '';
+  dniEl.value = '';
 
-  document.getElementById('verifyBtn').addEventListener('click', () => verifyDni(date));
-  document.getElementById('noRegBtn').addEventListener('click', () => showRegisterForm(date));
+  // Mostrar paso A, ocultar registro
+  formEl.style.display = 'grid';
+  regFormEl.style.display = 'none';
+
+  modalEl.setAttribute('aria-hidden', 'false');
+  modalEl.classList.add('open');
+  dniEl.focus();
 }
 
-async function verifyDni(date) {
-  const dni = document.getElementById('dniInput').value.trim();
-  if (!dni) return alert('Ingresa tu DNI.');
+function wireModal(){
+  topicOtherCk.addEventListener('change', () => {
+    const show = topicOtherCk.checked;
+    topicTextEl.style.display = show ? 'block' : 'none';
+    if (show) topicTextEl.focus();
+  });
 
-  try {
-    const res = await fetch(`${BASE_URL}/user/${dni}`);
-    if (res.ok) {
-      userDni = dni;
-      openTopicsForm();
-    } else if (res.status === 404) {
-      alert('DNI no encontrado, regístrate primero.');
-      showRegisterForm(date);
-    } else {
-      throw new Error();
-    }
-  } catch {
-    alert('Error al verificar. Intenta de nuevo.');
+  document.querySelectorAll('[data-close], #plan-close, #plan-cancel').forEach(el => {
+    el.addEventListener('click', closeModal);
+  });
+  regCancelBtn.addEventListener('click', () => {
+    // volver al paso A
+    regFormEl.style.display = 'none';
+    formEl.style.display = 'grid';
+    dniEl.focus();
+  });
+
+  formEl.addEventListener('submit', onSubmitPlan);
+  regFormEl.addEventListener('submit', onSubmitRegister);
+}
+
+function closeModal(){
+  modalEl.setAttribute('aria-hidden', 'true');
+  modalEl.classList.remove('open');
+  currentActivity = null;
+}
+
+async function onSubmitPlan(e){
+  e.preventDefault();
+  if (!currentActivity) return;
+
+  const dni = dniEl.value.trim();
+  if (!dni) return alert('Ingresá tu DNI');
+
+  // verificar usuario
+  const exists = await userExists(dni);
+  if (!exists){
+    // abrir paso de registro con DNI precargado
+    formEl.style.display = 'none';
+    regFormEl.style.display = 'grid';
+    regDniEl.value = dni;
+    regNameEl.focus();
+    return;
   }
+
+  // continuar guardado
+  const topic = getChosenTopic();
+  if (!topic) return;
+
+  await savePlanning(currentActivity, dni, topic);
 }
 
-function showRegisterForm(date) {
-  formContainer.innerHTML = `
-    <div id="step1-reg">
-      <h3>Registro de Usuario</h3>
-      <label>Nombre: <input id="regName" /></label>
-      <label>Apellido: <input id="regSurname" /></label>
-      <label>Email: <input id="regMail" type="email"/></label>
-      <label>DNI: <input id="regDni" /></label>
-      <div class="buttons">
-        <button id="regSubmitBtn">Registrar</button>
-        <button id="regCancelBtn">Cancelar</button>
-      </div>
-    </div>`;
-  document.getElementById('regCancelBtn').addEventListener('click', () => openDniForm(currentActivity.fecha.substr(0,10)));
-  document.getElementById('regSubmitBtn').addEventListener('click', () => registerUser());
-}
+async function onSubmitRegister(e){
+  e.preventDefault();
+  const name    = regNameEl.value.trim();
+  const surname = regSurnameEl.value.trim();
+  const mail    = regMailEl.value.trim();
+  const dni     = regDniEl.value.trim();
 
-async function registerUser() {
-  const name    = document.getElementById('regName').value.trim();
-  const surname = document.getElementById('regSurname').value.trim();
-  const mail    = document.getElementById('regMail').value.trim();
-  const dni     = document.getElementById('regDni').value.trim();
-  if (!name||!surname||!mail||!dni) return alert('Completa todos los campos.');
+  if (!name || !surname || !mail || !dni){
+    return alert('Completá todos los campos.');
+  }
 
-  try {
-    const res = await fetch(`${BASE_URL}/user`, {
+  try{
+    const res = await fetch(USER_API, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ name, surname, email:mail, dni })
+      body: JSON.stringify({ name, surname, email: mail, dni })
     });
-    if (!res.ok) throw new Error();
-    alert('Registrado con éxito.');
-    userDni = dni;
-    openTopicsForm();
-  } catch {
-    alert('Error al registrar. Intenta de nuevo.');
+    if (!res.ok) throw new Error('Registro falló');
+    // registrado → volver a plan
+    alert('Usuario creado. ¡Sigamos!');
+    // tomar el tópico elegido en el paso A
+    const topic = getChosenTopic();
+    if (!topic) {
+      // volvemos al paso A para que elija tópico
+      regFormEl.style.display = 'none';
+      formEl.style.display = 'grid';
+      return;
+    }
+    await savePlanning(currentActivity, dni, topic);
+  }catch(err){
+    console.error(err);
+    alert('No se pudo registrar. Probá de nuevo.');
   }
 }
 
-// — PASO 2: Temáticas y envío —
-async function openTopicsForm() {
-  formContainer.innerHTML = `
-    <div id="step2">
-      <h3>Selecciona Temáticas</h3>
-      <div id="propsList">Cargando…</div>
-      <div class="buttons">
-        <button id="submitBtn">Enviar</button>
-      </div>
-    </div>`;
-  // cargar opciones
-  let html = '';
-  try {
-    const res   = await fetch(PROPOSALS_API);
-    const props = await res.json();
-    props.forEach(p => {
-      html += `<label><input type="checkbox" name="prop" value="${p.tematica}"> ${p.tematica}</label><br/>`;
-    });
-  } catch { html = '<p>Error al cargar.</p>'; }
-  html += `
-    <label><input type="checkbox" id="otherChk"> Otro…</label>
-    <div id="otherDiv" style="display:none">
-      <input id="otherInput" placeholder="Nueva temática" />
-    </div>`;
-  document.getElementById('propsList').innerHTML = html;
-  document.getElementById('otherChk').addEventListener('change', e => {
-    document.getElementById('otherDiv').style.display = e.target.checked ? 'block' : 'none';
-  });
-  document.getElementById('submitBtn').addEventListener('click', submitActivityUpdate);
+function getChosenTopic(){
+  let topic = '';
+  if (topicOtherCk.checked){
+    topic = topicTextEl.value.trim();
+    if (!topic){ alert('Escribí tu tópico propio.'); return ''; }
+  } else {
+    topic = topicSelEl.value;
+    if (!topic){ alert('Elegí un tópico disponible o tildá “propio”.'); return ''; }
+  }
+  return topic;
 }
 
-async function submitActivityUpdate() {
-  const sel = Array.from(document.querySelectorAll('input[name="prop"]:checked'))
-    .map(cb => cb.value);
-  if (document.getElementById('otherChk').checked) {
-    const o = document.getElementById('otherInput').value.trim();
-    if (o) sel.push(o);
+async function userExists(dni){
+  try{
+    const res = await fetch(`${USER_API}/${encodeURIComponent(dni)}`);
+    if (res.ok) return true;
+    if (res.status === 404) return false;
+    throw new Error('Check user failed');
+  }catch(e){
+    console.error(e);
+    // si falla el check, por seguridad no bloqueamos: pedimos registro
+    return false;
   }
-  if (sel.length === 0) return alert('Selecciona al menos una temática.');
+}
 
-  const body = {
-    participants: [ userDni ],
-    topics: sel
-  };
-
-  try {
-    const res = await fetch(`${ACTIVITIES_API}/${currentActivity.id}`, {
+async function savePlanning(activity, dni, topic){
+  const existingDnis = (activity.participants || [])
+    .map(u => (u && typeof u === 'object') ? u.dni : String(u))
+    .filter(Boolean);
+  const participants = uniq([...existingDnis, dni]);
+  const topics       = uniq([...(activity.topics || []), topic]);
+  try{
+    const res = await fetch(`${ACTIVITIES_API}/${activity.id}`, {
       method: 'PUT',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(body)
+      body: JSON.stringify({ participants, topics })
     });
-    if (!res.ok) throw new Error();
-    alert('¡Inscripción guardada!');
-    closeForm();
-    await init();
-  } catch {
-    alert('Error al guardar inscripción.');
+    if (!res.ok) throw new Error('PUT failed');
+
+    alert('¡Guardado! Te sumaste como planificador/a.');
+    closeModal();
+    [upcoming] = await Promise.all([fetchUpcomingActivities()]);
+    renderUpcoming(upcoming);
+  }catch(err){
+    console.error(err);
+    alert('No se pudo guardar. Probá de nuevo.');
   }
 }
 
-// — Cerrar form —
-function closeForm() {
-  formContainer.style.display = 'none';
-  cancelBtn.style.display     = 'none';
-  formContainer.innerHTML     = '';
+function labelEstado(code){
+  switch(code){
+    case 'NO_HAY_NADIE': return 'No hay nadie para planificar';
+    case 'HAY_GENTE_PERO_NO_NECESARIA': return 'Hay gente, no la suficiente';
+    case 'YA_HAY_GENTE_PERO_NO_SE_PLANIFICO': return 'Ya hay suficiente gente';
+    case 'FUE_PLANIFICADA': return 'Planificada';
+    case 'FUE_DADA_LA_PLANIFICACION': return 'Planificación dada';
+    default: return code;
+  }
 }
+
+// ——— Hora fija 18:20 ———
+function fixTime1820(dateLike){
+  const d = new Date(dateLike);
+  if (isNaN(d)) return null;
+  // set horas/min atento a TZ local del navegador (Argentina -03)
+  d.setHours(18, 20, 0, 0);
+  return d;
+}
+function formatDateTime(d){
+  const dt = fixTime1820(d); // asegurar
+  return dt.toLocaleString('es-AR', {
+    weekday: 'short', day: '2-digit', month: 'short',
+    hour: '2-digit', minute: '2-digit'
+  }).replace('.', '');
+}
+
+// utils
+function uniq(arr){
+  const s = new Set();
+  const out = [];
+  for (const v of arr) {
+    const key = String(v).trim().toLowerCase();
+    if (!s.has(key)) { s.add(key); out.push(v); }
+  }
+  return out;
+}
+function escapeHtml(s=''){
+  return String(s)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#39;');
+}
+function escapeAttr(s=''){ return escapeHtml(s); }
+
+// --- nav mobile simple ---
+(function wireNav(){
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('primary-nav');
+  if (!toggle || !nav) return;
+  toggle.addEventListener('click', ()=>{
+    const open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+})();
