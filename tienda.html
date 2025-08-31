@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="theme-color" content="#72bf44"/>
-  <title>Banco de Ideas — Meirim BBYO</title>
+  <title>Tienda Meiru — Coming soon</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -24,48 +24,39 @@
         <a href="./index.html">Inicio</a>
         <a href="./planificar.html">Actividades</a>
         <a href="./banco.html">Banco de Ideas</a>
-        <a href="./index.html#penpals">PenPals</a>
-        <a href="./index.html#tienda">Tienda</a>
+        <a href="./penpals.html">PenPals</a>
+        <a href="./tienda.html" aria-current="page">Tienda</a>
       </nav>
     </div>
   </header>
 
- <!-- ... head/header iguales ... -->
+<!-- ... head/header iguales ... -->
 <main class="site-main">
-  <div class="container">
-    <h1>Banco de ideas</h1>
-    <p class="section-subtitle">Proponé temáticas y elegí cuáles usar en próximas actividades.</p>
+  <!-- HERO COUNTDOWN -->
+  <section class="countdown-hero" aria-live="polite" aria-label="Cuenta regresiva Tienda Meirú">
+    <div class="countdown-inner">
+      <h1 class="count-title">TIENDA MEIRU</h1>
 
-    <div class="grid-2">
-      <section class="card">
-        <h2 class="card-title">Enviar temática</h2>
-        <form class="form" id="form-tematica">
-          <div class="form-row">
-            <label for="tematica">Temática</label>
-            <input id="tematica" required placeholder="Liderazgo, Identidad..." />
-          </div>
-          <div class="actions left">
-            <button class="btn btn-green" type="submit">Proponer</button>
-            <button class="btn" type="reset">Limpiar</button>
-          </div>
-        </form>
-      </section>
+      <div id="countdown" class="count-display" role="timer" aria-atomic="true">
+        <span id="dd" class="num">00</span><span class="unit">d</span>
+        <span class="sep blink">:</span>
+        <span id="hh" class="num">00</span><span class="unit">h</span>
+        <span class="sep blink">:</span>
+        <span id="mm" class="num">00</span><span class="unit">m</span>
+        <span class="sep blink">:</span>
+        <span id="ss" class="num">00</span><span class="unit">s</span>
+      </div>
 
-      <section class="card">
-        <h2 class="card-title">Temáticas sugeridas</h2>
-        <ul class="list" id="tematicas-list"></ul>
-        <p class="muted small" style="margin-top:.5rem">
-          * “Usada” se marca cuando la temática se asocia a una actividad.
-        </p>
-      </section>
+      <p class="count-sub">Lanzamos el <strong>14 de octubre</strong></p>
+      <span id="sr-announce" class="sr-only" aria-live="polite"></span>
     </div>
-  </div>
+  </section>
 </main>
 <!-- ... footer + script.js ... -->
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <span>Meirim Chapter 1</span>
+      <span>Meirim Chapter #5618</span>
       <div class="footer-logos">
         <img src="images/aza.jpg"  alt="AZA Logo"  />
         <img src="images/bbg.png" alt="BBG Logo" />

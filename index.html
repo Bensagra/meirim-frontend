@@ -2,8 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+<<<<<<< HEAD
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>BBYO • Más teens, experiencias más significativas</title>
+=======
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#72bf44"/>
+  <title>Meirim BBYO</title>
+>>>>>>> f81a0fa (feat: Implement PenPals and Shop pages with countdown functionality and enhanced UI)
   <link rel="stylesheet" href="style.css" />
   <link rel="preload" href="images/bbyo.png" as="image">
 </head>
@@ -35,6 +41,7 @@
           <em>experiencias judías significativas</em>.
         </p>
 
+<<<<<<< HEAD
         <!-- Carousel -->
         <div class="carousel" id="carousel" aria-label="Galería de actividades" tabindex="0">
           <div class="slides">
@@ -52,10 +59,30 @@
         <div class="actions">
           <a href="./planificar.html" class="btn btn-aza">Planificar Actividad</a>
           <a href="./banco.html" class="btn btn-bbg">Banco de Ideas</a>
+=======
+      <!-- Carousel -->
+      <div class="carousel" id="carousel" role="region" aria-label="Galería de actividades">
+        <div class="slides" data-slide-count="4">
+          <div class="slide"><img src="images/1.jpeg" alt="Actividad 1" /></div>
+          <div class="slide"><img src="images/2.jpeg" alt="Actividad 2" /></div>
+          <div class="slide"><img src="images/3.jpeg" alt="Actividad 3" /></div>
+          <div class="slide"><img src="images/4.jpeg" alt="Actividad 4" /></div>
+        </div>
+
+        <button class="carousel-btn prev" aria-label="Anterior">&#10094;</button>
+        <button class="carousel-btn next" aria-label="Siguiente">&#10095;</button>
+
+        <div class="dots" role="tablist" aria-label="Seleccionar diapositiva">
+          <button class="dot" aria-label="Ir a la diapositiva 1" aria-selected="true" data-index="0"></button>
+          <button class="dot" aria-label="Ir a la diapositiva 2" aria-selected="false" data-index="1"></button>
+          <button class="dot" aria-label="Ir a la diapositiva 3" aria-selected="false" data-index="2"></button>
+          <button class="dot" aria-label="Ir a la diapositiva 4" aria-selected="false" data-index="3"></button>
+>>>>>>> f81a0fa (feat: Implement PenPals and Shop pages with countdown functionality and enhanced UI)
         </div>
       </div>
     </section>
 
+<<<<<<< HEAD
     <!-- Próximas actividades (desde tu API) -->
     <section class="upcoming">
       <div class="container">
@@ -87,6 +114,90 @@
           <a class="chip" href="?chapter=aza">AZA</a>
           <a class="chip" href="?chapter=bbg">BBG</a>
           <a class="chip" href="?chapter=argentina">Argentina</a>
+=======
+      <!-- CTAs -->
+      <div class="actions">
+        <a href="./planificar.html" class="btn btn-green">Planificar Actividad</a>
+        <a href="./banco.html" class="btn btn-pink">Banco de Ideas</a>
+      </div>
+    </div>
+
+    <!-- PenPals -->
+    <section class="section" id="penpals" 
+             data-target-date="2025-09-09T18:20:00-03:00"
+             aria-labelledby="penpals-title">
+      <div class="container">
+        <h2 class="section-title" id="penpals-title">PenPals — Proximo evento</h2>
+        <p class="section-subtitle">Nos vemos el <strong>martes 9 de septiembre a las 18:20</strong>. Sumate y conectemos con chapters del país y del mundo.</p>
+
+        <div class="card centered">
+          <div class="countdown" aria-live="polite">
+            <div class="cd-cell"><span class="dd">00</span><small>Días</small></div>
+            <div class="cd-sep">:</div>
+            <div class="cd-cell"><span class="hh">00</span><small>Horas</small></div>
+            <div class="cd-sep">:</div>
+            <div class="cd-cell"><span class="mm">00</span><small>Min</small></div>
+            <div class="cd-sep">:</div>
+            <div class="cd-cell"><span class="ss">00</span><small>Seg</small></div>
+          </div>
+
+          <div class="actions">
+            <a class="btn btn-green" href="#" aria-disabled="true">Quiero sumarme</a>
+            <a class="btn btn-pink" href="./banco.html">Traer idea de intercambio</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tienda Meirú -->
+    <section class="section" id="tienda" aria-labelledby="tienda-title">
+      <div class="container">
+        <h2 class="section-title" id="tienda-title">Tienda Meirú <span class="pill pill-primary">Coming soon</span></h2>
+        <p class="section-subtitle">Merch oficial para representar al chapter. Muy pronto…</p>
+
+        <div class="shop-grid">
+          <article class="shop-card">
+            <div class="ph-tile" role="img" aria-label="Remera Meirú próximamente">
+              <div class="ph-shine"></div>
+              <svg class="ph-mark" viewBox="0 0 200 60" aria-hidden="true" focusable="false">
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">MEIRU</text>
+              </svg>
+              <span class="ribbon">COMING SOON</span>
+            </div>
+            <div class="shop-meta">
+              <h3 class="shop-name">Remera Meiru</h3>
+              <span class="pill pill-primary">Próximamente</span>
+            </div>
+          </article>
+
+          <article class="shop-card">
+            <div class="ph-tile" role="img" aria-label="Buzo Meirú próximamente">
+              <div class="ph-shine"></div>
+              <svg class="ph-mark" viewBox="0 0 200 60" aria-hidden="true" focusable="false">
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">MEIRU</text>
+              </svg>
+              <span class="ribbon">COMING SOON</span>
+            </div>
+            <div class="shop-meta">
+              <h3 class="shop-name">Buzo Meiru</h3>
+              <span class="pill pill-primary">Próximamente</span>
+            </div>
+          </article>
+
+          <article class="shop-card">
+            <div class="ph-tile" role="img" aria-label="Gorra Meirú próximamente">
+              <div class="ph-shine"></div>
+              <svg class="ph-mark" viewBox="0 0 200 60" aria-hidden="true" focusable="false">
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">MEIRU</text>
+              </svg>
+              <span class="ribbon">COMING SOON</span>
+            </div>
+            <div class="shop-meta">
+              <h3 class="shop-name">Pantalon Meiru</h3>
+              <span class="pill pill-primary">Próximamente</span>
+            </div>
+          </article>
+>>>>>>> f81a0fa (feat: Implement PenPals and Shop pages with countdown functionality and enhanced UI)
         </div>
       </div>
     </section>
@@ -97,9 +208,15 @@
     <div class="container footer-inner">
       <span>BBYO • Movimiento teen judío internacional</span>
       <div class="footer-logos">
+<<<<<<< HEAD
         <img src="images/aza.jpg" alt="Sello AZA" />
         <img src="images/bbg.png" alt="Sello BBG" />
         <img src="images/bbyo.png" alt="Logo BBYO" />
+=======
+        <img src="images/aza.jpg"  alt="AZA Logo" />
+        <img src="images/bbg.png" alt="BBG Logo" />
+        <img src="images/bbyo.png" alt="BBYO Logo"/>
+>>>>>>> f81a0fa (feat: Implement PenPals and Shop pages with countdown functionality and enhanced UI)
       </div>
     </div>
   </footer>

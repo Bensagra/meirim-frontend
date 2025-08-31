@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<<<<<<< HEAD
   <title>Planificar Actividad · BBYO</title>
 <link rel="stylesheet" href="planificar.css">
 </head>
@@ -15,13 +16,36 @@
         <span>BBYO</span>
       </a>
       <nav class="nav" aria-label="Principal">
+=======
+  <meta name="theme-color" content="#72bf44"/>
+  <title>Planificar Actividades — Meirim BBYO</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="./index.html" class="brand" aria-label="Inicio Meirim BBYO">
+        <img src="images/bbyo.png" alt="Meirim BBYO" class="logo" />
+      </a>
+
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-nav">
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+      </button>
+
+      <nav class="nav" id="primary-nav" role="navigation">
+>>>>>>> f81a0fa (feat: Implement PenPals and Shop pages with countdown functionality and enhanced UI)
         <a href="./index.html">Inicio</a>
         <a href="./planificar.html">Actividades</a>
         <a href="./banco.html">Banco de Ideas</a>
+        <a href="./index.html#penpals">PenPals</a>
+        <a href="./index.html#tienda">Tienda</a>
       </nav>
     </div>
   </header>
 
+<<<<<<< HEAD
   <!-- Main Content -->
   <main class="container calendar-wrap">
     <div class="topbar">
@@ -39,8 +63,70 @@
         <span id="monthYear" class="month-year"></span>
         <button id="nextMonth" class="nav-btn" aria-label="Mes siguiente">›</button>
       </div>
-    </div>
+=======
+ <!-- ... head/header iguales ... -->
+<main class="site-main">
+  <div class="container">
+    <h1>Planificación de actividades</h1>
+    <p class="section-subtitle">Definí fecha, participantes, temáticas y estado.</p>
 
+    <div class="grid-2">
+      <section class="card">
+        <h2 class="card-title">Nueva / Editar actividad</h2>
+        <form class="form" id="form-actividad">
+          <div class="form-row">
+            <label for="fecha">Fecha y hora</label>
+            <input type="datetime-local" id="fecha" required />
+          </div>
+          <div class="form-row">
+            <label for="estado">Estado</label>
+            <select id="estado">
+              <option value="NO_HAY_NADIE">No hay nadie</option>
+              <option value="HAY_GENTE_PERO_NO_NECESARIA">Hay gente, no la necesaria</option>
+              <option value="YA_HAY_GENTE_PERO_NO_SE_PLANIFICO">Hay gente, falta planificar</option>
+              <option value="FUE_PLANIFICADA">Planificada</option>
+              <option value="FUE_DADA_LA_PLANIFICACION">Planificación dada</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="participantes">Participantes (IDs o nombres)</label>
+            <input id="participantes" placeholder="1,2,3 o Ana, Juan..." />
+          </div>
+          <div class="form-row">
+            <label for="tematicas">Temáticas (IDs o títulos)</label>
+            <input id="tematicas" placeholder="5,7 o Liderazgo..." />
+          </div>
+          <div class="form-row">
+            <label for="notas">Notas</label>
+            <textarea id="notas" rows="4"></textarea>
+          </div>
+          <div class="actions left">
+            <button class="btn btn-green" type="submit">Guardar</button>
+            <button class="btn" type="reset">Limpiar</button>
+          </div>
+        </form>
+      </section>
+
+      <section>
+        <div class="card">
+          <h2 class="card-title">Próximas actividades</h2>
+          <ul class="list" id="proximas-list"></ul>
+        </div>
+        <div class="legend">
+          <span class="pill pill-danger">No hay nadie</span>
+          <span class="pill pill-warn">Hay gente, no la necesaria</span>
+          <span class="pill pill-info">Hay gente, falta planificar</span>
+          <span class="pill pill-primary">Planificada</span>
+          <span class="pill pill-success">Planificación dada</span>
+        </div>
+      </section>
+>>>>>>> f81a0fa (feat: Implement PenPals and Shop pages with countdown functionality and enhanced UI)
+    </div>
+  </div>
+</main>
+<!-- ... footer + script.js ... -->
+
+<<<<<<< HEAD
     <table id="calendar" aria-label="Calendario de actividades"></table>
 
     <div class="legend" aria-hidden="false">
@@ -61,10 +147,20 @@
         <img src="images/aza.jpg" alt="Sello AZA"/>
         <img src="images/bbg.png" alt="Sello BBG"/>
         <img src="images/bbyo.png" alt="Logo BBYO"/>
+=======
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>Meirim Chapter 1</span>
+      <div class="footer-logos">
+        <img src="images/aza.jpg"  alt="AZA Logo"  />
+        <img src="images/bbg.png" alt="BBG Logo" />
+        <img src="images/bbyo.png" alt="BBYO Logo"/>
+>>>>>>> f81a0fa (feat: Implement PenPals and Shop pages with countdown functionality and enhanced UI)
       </div>
     </div>
   </footer>
 
+<<<<<<< HEAD
   <!-- Modal / Form -->
   <div id="ideaFormContainer" class="form-container" role="dialog" aria-modal="true">
     <div class="form-card" id="formCard">
@@ -276,5 +372,8 @@
     async function init(){ await loadActivities(); renderCalendar(currentYear, currentMonth); }
     init();
   </script>
+=======
+  <script src="script.js"></script>
+>>>>>>> f81a0fa (feat: Implement PenPals and Shop pages with countdown functionality and enhanced UI)
 </body>
 </html>

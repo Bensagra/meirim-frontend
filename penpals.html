@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#72bf44"/>
+  <title>PenPals — Meirim BBYO</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="./index.html" class="brand" aria-label="Inicio Meirim BBYO">
+        <img src="images/bbyo.png" alt="Meirim BBYO" class="logo" />
+      </a>
+
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-nav">
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+      </button>
+
+      <nav class="nav" id="primary-nav" role="navigation">
+        <a href="./index.html">Inicio</a>
+        <a href="./planificar.html">Actividades</a>
+        <a href="./banco.html">Banco de Ideas</a>
+        <a href="./penpals.html" aria-current="page">PenPals</a>
+        <a href="./tienda.html">Tienda</a>
+      </nav>
+    </div>
+  </header>
+
+<!-- ... head/header iguales ... -->
+<main class="site-main">
+  <section class="section" id="penpals" data-target-date="2025-09-09T18:20:00-03:00">
+    <div class="container">
+      <h2 class="section-title">Próximo encuentro — Martes 19:00</h2>
+      <div class="card centered">
+        <div class="countdown" aria-live="polite">
+          <div class="cd-cell"><span class="dd">00</span><small>Días</small></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-cell"><span class="hh">00</span><small>Horas</small></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-cell"><span class="mm">00</span><small>Min</small></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-cell"><span class="ss">00</span><small>Seg</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="sumate">
+    <div class="container grid-2">
+      <div class="card">
+        <h2 class="card-title">Sumate a PenPals</h2>
+        <form class="form" id="form-penpals">
+          <div class="form-row"><label for="nombre">Nombre</label><input id="nombre" required /></div>
+          <div class="form-row"><label for="email">Email</label><input id="email" type="email" required /></div>
+          <div class="form-row">
+            <label for="idioma">Idioma</label>
+            <select id="idioma" required>
+              <option value="">Elegí…</option>
+              <option>Inglés</option><option>Hebreo</option><option>Portugués</option><option>Otro</option>
+            </select>
+          </div>
+          <div class="actions left"><button class="btn btn-green" type="submit">Enviar</button></div>
+        </form>
+      </div>
+      <div class="card">
+        <h2 class="card-title">Tips</h2>
+        <ul class="list">
+          <li class="list-item"><div><strong>Presentate</strong><div class="muted">Nombre, ciudad, hobbies.</div></div></li>
+          <li class="list-item"><div><strong>Rompehielos</strong><div class="muted">Música, deportes…</div></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+<!-- ... footer + script.js ... -->
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>Meirim Chapter 1</span>
+      <div class="footer-logos">
+        <img src="images/aza.jpg"  alt="AZA Logo"  />
+        <img src="images/bbg.png" alt="BBG Logo" />
+        <img src="images/bbyo.png" alt="BBYO Logo"/>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
