@@ -1,14 +1,22 @@
 /* planificar.css */
+
 /* Reset y tipografía */
- :root{
-      --aza-blue:#1565c0;   /* AZA */
-      --bbg-red:#c62828;    /* BBG */
-      --menorah:#d9b40b;    /* accent */
-      --ink:#1b1f23; --muted:#5b6570; --bg:#f6f8fb;
-      --radius:16px; --shadow:0 8px 24px rgba(0,0,0,.08);
-    }
+:root{
+  --aza-blue:#1565c0;   /* AZA */
+  --bbg-red:#c62828;    /* BBG */
+  --menorah:#d9b40b;    /* accent */
+  --ink:#1b1f23; --muted:#5b6570; --bg:#f6f8fb;
+  --radius:16px; --shadow:0 8px 24px rgba(0,0,0,.08);
+  --shadow-sm:0 4px 12px rgba(0,0,0,.08);
+}
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: sans-serif; color: #333; background: #FCE4EC; min-height:100vh; display:flex; flex-direction:column; }
+body {
+  font-family: sans-serif; color: #333; background: #FCE4EC;
+  min-height:100vh; display:flex; flex-direction:column;
+}
+/* Anti overflow global */
+html, body { width:100%; max-width:100%; overflow-x:hidden; }
+img, svg, canvas, video { max-width:100%; height:auto; }
 
 /* Contenedor central */
 .container { width:90%; max-width:1200px; margin:0 auto; }
@@ -29,13 +37,13 @@ body { font-family: sans-serif; color: #333; background: #FCE4EC; min-height:100
 }
 .nav a:hover { color:#f0f0f0; }
 
-/* Main calendario */
+/* Main calendario (desktop/base) */
 .calendar-container {
   flex:1;
-  max-width:600px; width:90%; margin:2rem auto;
-  background:#fff; border-radius:8px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
-  padding:1.5rem;
+  max-width:720px; width:94%; margin:1rem auto;
+  background:#fff; border-radius:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.10);
+  padding:1.25rem;
   position:relative;
 }
 
@@ -52,9 +60,7 @@ body { font-family: sans-serif; color: #333; background: #FCE4EC; min-height:100
 .nav-btn:hover { color:#D81B60; }
 
 /* Calendario tabla */
-#calendar {
-  width:100%; border-collapse:collapse;
-}
+#calendar { width:100%; border-collapse:collapse; }
 #calendar th, #calendar td {
   width:14.28%; height:48px; text-align:center;
   border:1px solid #eee; vertical-align:middle;
@@ -70,445 +76,65 @@ body { font-family: sans-serif; color: #333; background: #FCE4EC; min-height:100
 .state-2 { background-color: #f8e9a1; }
 .state-3 { background-color: #f9ccac; }
 .state-4 { background-color: #f08080; }
-.tile-no-activity {
-  background-color: #444; color:#fff;
-}
-
-/* Formulario modal */
-.form-container {
-  position:absolute; top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  width:90%; max-width:320px; background:#fff;
-  box-shadow:0 4px 12px rgba(0,0,0,0.15);
-  border-radius:8px; padding:16px; z-index:10;
-}
-.form-container label { display:flex; flex-direction:column; margin-bottom:8px; }
-.form-container input {
-  margin-top:4px; padding:6px 8px;
-  border:1px solid #ccc; border-radius:4px;
-}
-.form-container .buttons {
-  display:flex; justify-content:flex-end; gap:8px; margin-top:12px;
-}
-.form-container .buttons button {
-  padding:6px 12px; border:none; border-radius:4px;
-  font-weight:bold; cursor:pointer;
-  transition:background .2s;
-}
-#verifyBtn, #toProposalsBtn, #submitBtn, #regSubmitBtn {
-  background-color:#72bf44; color:#fff;
-}
-#noRegBtn, #regCancelBtn {
-  background-color:#ccc; color:#333;
-}
-.btn-cancel {
-  position:absolute; top:8px; right:8px;
-  background:rgba(0,0,0,0.6); color:#fff;
-  border:none; border-radius:50%; width:32px; height:32px;
-  font-size:1.2rem; cursor:pointer; z-index:11;
-}
-.btn-cancel:hover { background:rgba(0,0,0,0.8); }
-
-/* Footer fijo */
-.site-footer {
-  background: linear-gradient(90deg, #2e7d32, #1b5e20);
-  color:#e0f2f1; padding:1rem 0;
-  position:fixed; left:0; bottom:0; width:100%; z-index:1000;
-  box-shadow:0 -4px 8px rgba(0,0,0,0.3);
-}
-.footer-inner {
-  display:flex; flex-wrap:wrap;
-  align-items:center; justify-content:space-between;
-  width:90%; max-width:1200px; margin:0 auto;
-}
-.footer-inner span {
-  font-size:1.25rem; font-weight:600;
-}
-.footer-logos { display:flex; gap:1.5rem; }
-.footer-logos img {
-  height:36px; opacity:.8;
-  filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-  transition:transform .3s,opacity .3s;
-}
-.footer-logos img:hover {
-  transform:translateY(-4px) scale(1.1); opacity:1;
-}
-
-/* Responsive */
-@media (max-width:640px) {
-  .footer-inner { flex-direction:column; text-align:center; }
-}
+.tile-no-activity { background-color: #444; color:#fff; }
 
 /* ——— Estados Meirim ——— */
 #calendar td.state-no-hay-nadie {
-  background-color: #FCE4EC;  /* rosa muy claro */
-  border: 2px solid #F48FB1;  /* rosa suave */
-  color: #880E4F;             /* texto vino oscuro */
+  background-color: #FCE4EC;  border: 2px solid #F48FB1;  color: #880E4F;
 }
-
 #calendar td.state-hay-gente-pero-no-necesaria {
-  background-color: #F8BBD0;  /* rosa claro */
-  border: 2px solid #EC407A;  /* rosa medio */
-  color: #880E4F;             /* texto vino oscuro */
+  background-color: #F8BBD0;  border: 2px solid #EC407A;  color: #880E4F;
 }
-
 #calendar td.state-ya-hay-gente-no-se-planifico {
-  background-color: #EC407A;  /* rosa vibrante */
-  border: 2px solid #D81B60;  /* rosa Meirim */
-  color: #FFF;                /* texto blanco */
+  background-color: #EC407A;  border: 2px solid #D81B60;  color: #FFF;
 }
-
 #calendar td.state-fue-planificada {
-  background-color: #C8E6C9;  /* verde muy claro */
-  border: 2px solid #66BB6A;  /* verde suave */
-  color: #1B5E20;             /* texto verde oscuro */
+  background-color: #C8E6C9;  border: 2px solid #66BB6A;  color: #1B5E20;
 }
-
 #calendar td.state-fue-dada {
-  background-color: #72BF44;  /* verde Meirim */
-  border: 2px solid #388E3C;  /* verde oscuro */
-  color: #FFF;                /* texto blanco */
+  background-color: #72BF44;  border: 2px solid #388E3C;  color: #FFF;
 }
-
 /* fallback: sin actividad */
 #calendar td.tile-no-activity {
-  background-color: #EEEEEE;  /* gris claro */
-  border: 2px dashed #BDBDBD; /* gris medio */
-  color: #424242;             /* texto gris oscuro */
+  background-color: #EEEEEE; border: 2px dashed #BDBDBD; color: #424242;
 }
 
 /* Leyenda: swatches fuera de la tabla */
-.legend .swatch.state-no-hay-nadie {
-  background-color: #FCE4EC;
-  border: 2px solid #F48FB1;
-}
-.legend .swatch.state-hay-gente-pero-no-necesaria {
-  background-color: #F8BBD0;
-  border: 2px solid #EC407A;
-}
-.legend .swatch.state-ya-hay-gente-no-se-planifico {
-  background-color: #EC407A;
-  border: 2px solid #D81B60;
-}
-.legend .swatch.state-fue-planificada {
-  background-color: #C8E6C9;
-  border: 2px solid #66BB6A;
-}
-.legend .swatch.state-fue-dada {
-  background-color: #72BF44;
-  border: 2px solid #388E3C;
-}
-.legend .swatch.tile-no-activity {
-  background-color: #EEEEEE;
-  border: 2px dashed #BDBDBD;
-}
-
-.swatch {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin-right: 6px;
-  border-radius: 3px;
-}
-
-
-/* —– Mejora Formulario Meirim —– */
-.form-container {
-  background: linear-gradient(135deg, #FCE4EC 0%, #C8E6C9 100%);
-  border: 2px solid #D81B60;
-  border-radius: 12px;
-  padding: 24px;
-  width: 320px;
-  max-width: 90%;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: sans-serif;
-}
-
-/* Indicador de pasos */
-.form-container .form-progress {
-  font-size: 0.9rem;
-  color: #880E4F;
-  margin-bottom: 12px;
-  text-align: center;
-}
-
-/* Títulos de sección */
-.form-container h3 {
-  color: #D81B60;
-  font-size: 1.2rem;
-  margin-bottom: 16px;
-  text-align: center;
-}
-
-/* Labels e inputs */
-.form-container label {
-  display: block;
-  margin-bottom: 12px;
-  font-weight: 500;
-  color: #424242;
-}
-.form-container input {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid #EC407A;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color .2s, box-shadow .2s;
-}
-.form-container input:focus {
-  outline: none;
-  border-color: #D81B60;
-  box-shadow: 0 0 6px rgba(216,27,96,0.4);
-}
-
-/* Botones */
-.form-container .buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: 16px;
-}
-.form-container .buttons button {
-  flex: 1;
-  padding: 10px 0;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background .2s, transform .1s;
-}
-#verifyBtn,
-#toProposalsBtn,
-#submitBtn,
-#regSubmitBtn {
-  background: #72BF44;
-  color: #fff;
-}
-#verifyBtn:hover,
-#toProposalsBtn:hover,
-#submitBtn:hover,
-#regSubmitBtn:hover {
-  background: #388E3C;
-  transform: translateY(-1px);
-}
-#noRegBtn,
-#regCancelBtn {
-  background: #EC407A;
-  color: #fff;
-}
-#noRegBtn:hover,
-#regCancelBtn:hover {
-  background: #D81B60;
-  transform: translateY(-1px);
-}
-
-/* Botón de cerrar */
-.btn-cancel {
-  background: #880E4F;
-  color: #fff;
-  top: 12px; right: 12px;
-}
-.btn-cancel:hover {
-  background: #660B3A;
-}
-
-/* Checkbox y lista de temáticas */
-#propsList label {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-#propsList input[type="checkbox"] {
-  margin-right: 8px;
-  width: 16px; height: 16px;
-  accent-color: #D81B60;
-}
-
-/* Contenedor “Otro” */
-#otherDiv {
-  margin-top: 8px;
-}
-
-/* Aseguramos que el contenedor sea relativo y centre su contenido */
-.form-container {
-  position: relative;      /* para que .btn-cancel se ubique respecto a este */
-  text-align: center;      /* centra títulos, párrafos y botones */
-}
-
-/* Pero los label+input los dejamos alineados a la izquierda */
-.form-container label {
-  text-align: left;        /* mantiene la forma limpia */
-}
-
-/* Títulos y textos interiores */
-.form-container h3,
-.form-container p {
-  text-align: center;      /* refuerza el centrado */
-}
-
-/* Ajuste de la “×” de cierre */
-.btn-cancel {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 20;
-}
-
-/* Para que el icono se mantenga fijo al contenedor */
-.form-container .btn-cancel {
-  /* nada más, ya hereda position: absolute sobre el contenedor */
-}
-
-
-
-
-
-
-/* Footer mejorado */
-.site-footer {
-  position: relative;
-  background: linear-gradient(135deg, #388E3C 0%, #72BF44 100%);
-  color: #fff;
-  padding: 2.5rem 0;
-  clip-path: polygon(0 8%, 100% 0%, 100% 100%, 0% 100%);
-  overflow: hidden;
-  font-family: sans-serif;
-}
-
-/* Curva decorativa extra (opcional) */
-.site-footer::before {
-  content: '';
-  position: absolute;
-  top: -60px;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  background: #fff;
-  border-radius: 50% 50% 0 0;
-  opacity: 0.15;
-}
-
-/* Contenido del footer */
-.footer-inner {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Título grande */
-.footer-inner span {
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
-/* Logos con efecto hover */
-.footer-logos {
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 0.5rem;
-}
-
-.footer-logos img {
-  height: 40px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)) brightness(1.2);
-  transition: transform 0.3s ease, filter 0.3s ease;
-}
-
-.footer-logos img:hover {
-  transform: translateY(-6px) scale(1.15);
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6)) brightness(1.4);
-}
-
-/* En pantallas pequeñas, centra todo */
-@media (max-width: 640px) {
-  .footer-inner {
-    flex-direction: column;
-    text-align: center;
-    gap: 1rem;
-  }
-}
-
-.site-footer {
-  position: relative;
-  /* Degradado 3 colores: rosa fuerte → rosa medio → verde Meirim */
-  background: linear-gradient(135deg, #D81B60 0%, #EC407A 50%, #72BF44 100%);
-  color: #fff;
-  padding: 2.5rem 0;
-  clip-path: polygon(0 8%, 100% 0%, 100% 100%, 0% 100%);
-  overflow: hidden;
-  font-family: sans-serif;
-}
-
-/* Curva decorativa */
-.site-footer::before {
-  content: '';
-  position: absolute;
-  top: -60px;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  background: #fff;
-  border-radius: 50% 50% 0 0;
-  opacity: 0.15;
-}
-
-
-.site-footer {
-  /* Degradado 3 colores: rosa fuerte → rosa medio → verde Meirim */
-  background: linear-gradient(135deg, #D81B60 0%, #EC407A 30%, #72BF44 100%);
-  clip-path: polygon(0 4%, 100% 0%, 100% 100%, 0% 100%);
-  padding: 2rem 0;  /* ligeramente menos alto */
-}
-
-.site-footer::before {
-  content: '';
-  position: absolute;
-  top: -40px;      /* menos alto */
-  left: 0;
-  width: 100%;
-  height: 40px;    /* más estrecho */
-  background: #fff;
-  border-radius: 50% 50% 0 0;
-  opacity: 0.1;    /* más tenue */
-}
-
+.legend .swatch.state-no-hay-nadie { background-color:#FCE4EC; border:2px solid #F48FB1; }
+.legend .swatch.state-hay-gente-pero-no-necesaria { background-color:#F8BBD0; border:2px solid #EC407A; }
+.legend .swatch.state-ya-hay-gente-no-se-planifico { background-color:#EC407A; border:2px solid #D81B60; }
+.legend .swatch.state-fue-planificada { background-color:#C8E6C9; border:2px solid #66BB6A; }
+.legend .swatch.state-fue-dada { background-color:#72BF44; border:2px solid #388E3C; }
+.legend .swatch.tile-no-activity { background-color:#EEEEEE; border:2px dashed #BDBDBD; }
+.swatch { display:inline-block; width:16px; height:16px; margin-right:6px; border-radius:3px; }
 
 /* ===== Planificar: lista de próximas ===== */
 .activity-list{
-  list-style:none;
-  display:flex;
-  flex-direction:column;
-  gap:.75rem;
-  margin-top:.75rem;
+  list-style:none; display:flex; flex-direction:column;
+  gap:.75rem; margin-top:.75rem;
 }
 .activity-item{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:.75rem;
-  padding:.85rem 1rem;
-  border-radius:.9rem;
-  background:#fff;
-  box-shadow:var(--shadow-sm);
+  display:flex; align-items:center; justify-content:space-between;
+  gap:.75rem; padding:.85rem 1rem; border-radius:.9rem;
+  background:#fff; box-shadow:var(--shadow-sm);
 }
 .activity-info{ text-align:left; }
-.activity-when{
-  font-weight:800;
-  font-size:1.05rem;
-}
-.activity-meta{
-  display:flex; align-items:center; gap:.5rem; margin-top:.25rem;
-}
+.activity-when{ font-weight:800; font-size:1.05rem; }
+.activity-meta{ display:flex; align-items:center; gap:.5rem; margin-top:.25rem; }
 .activity-planners{ color:var(--muted); }
 .activity-actions{ flex-shrink:0; }
 
+/* Anti-overflow (global) */
+.activity-item{ max-width:100%; width:100%; overflow:hidden; }
+.activity-item > *{ min-width:0; }
+.activity-info{ flex:1; min-width:0; word-wrap:break-word; }
+.activity-actions{ width:100%; margin-left:0; }
+.activity-actions .btn, .activity-actions button{
+  display:block; width:100%; max-width:100%;
+}
+
 /* ===== Modal básico ===== */
-.modal{ position:fixed; inset:0; display:none; }
+.modal{ position:fixed; inset:0; display:none; z-index:2000; }
 .modal.open{ display:block; }
 .modal-backdrop{
   position:absolute; inset:0; background:rgba(0,0,0,.45); backdrop-filter: blur(2px);
@@ -523,4 +149,171 @@ body { font-family: sans-serif; color: #333; background: #FCE4EC; min-height:100
 .modal-close{
   position:absolute; right:.75rem; top:.5rem; border:0; background:transparent;
   font-size:1.5rem; cursor:pointer; line-height:1;
+}
+
+/* Día bloqueado: oscurecido y sin interacción */
+.activity-item.is-blocked {
+  background:#1f2937; color:#e5e7eb; opacity:.9; filter:grayscale(.2);
+}
+.activity-item.is-blocked .activity-when { color:#f3f4f6; }
+.activity-item.is-blocked .activity-planners { color:#cbd5e1; }
+.activity-item.is-blocked .btn[disabled],
+.activity-item.is-blocked .btn[aria-disabled="true"] {
+  background:#6b7280 !important; cursor:not-allowed; box-shadow:none;
+}
+.pill.pill-blocked {
+  background:#374151; color:#f9fafb; border-radius:999px;
+  padding:.2rem .55rem; font-weight:800; font-size:.78rem;
+}
+
+/* —– Mejora Formulario Meirim —– */
+.form-container {
+  background: linear-gradient(135deg, #FCE4EC 0%, #C8E6C9 100%);
+  border: 2px solid #D81B60;
+  border-radius: 12px;
+  padding: 24px;
+  width: 320px;
+  max-width: 90%;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  position: absolute; top:50%; left:50%; transform: translate(-50%, -50%);
+  font-family: sans-serif;
+}
+/* Indicador de pasos */
+.form-container .form-progress { font-size:.9rem; color:#880E4F; margin-bottom:12px; text-align:center; }
+/* Títulos */
+.form-container h3 { color:#D81B60; font-size:1.2rem; margin-bottom:16px; text-align:center; }
+/* Labels e inputs */
+.form-container label { display:block; margin-bottom:12px; font-weight:500; color:#424242; text-align:left; }
+.form-container input {
+  width:100%; padding:8px 10px; border:1px solid #EC407A; border-radius:6px; font-size:1rem;
+  transition: border-color .2s, box-shadow .2s;
+}
+.form-container input:focus { outline:none; border-color:#D81B60; box-shadow:0 0 6px rgba(216,27,96,.4); }
+/* Botones */
+.form-container .buttons { display:flex; justify-content:space-between; gap:8px; margin-top:16px; }
+.form-container .buttons button {
+  flex:1; padding:10px 0; border:none; border-radius:6px; font-size:1rem; font-weight:600;
+  cursor:pointer; transition:background .2s, transform .1s;
+}
+#verifyBtn, #toProposalsBtn, #submitBtn, #regSubmitBtn { background:#72BF44; color:#fff; }
+#verifyBtn:hover, #toProposalsBtn:hover, #submitBtn:hover, #regSubmitBtn:hover { background:#388E3C; transform:translateY(-1px); }
+#noRegBtn, #regCancelBtn { background:#EC407A; color:#fff; }
+#noRegBtn:hover, #regCancelBtn:hover { background:#D81B60; transform:translateY(-1px); }
+/* Botón de cerrar */
+.btn-cancel { background:#880E4F; color:#fff; top:12px; right:12px; }
+.btn-cancel:hover { background:#660B3A; }
+.btn-cancel { position:absolute; top:12px; right:12px; z-index:20; }
+/* Checkbox temáticas */
+#propsList label { display:flex; align-items:center; margin-bottom:8px; }
+#propsList input[type="checkbox"] { margin-right:8px; width:16px; height:16px; accent-color:#D81B60; }
+#otherDiv { margin-top:8px; }
+
+/* ===== Footer (no fijo, consolidado) ===== */
+.site-footer {
+  position: relative;
+  background: linear-gradient(135deg, #D81B60 0%, #EC407A 30%, #72BF44 100%);
+  color: #fff;
+  padding: 2rem 0;
+  clip-path: polygon(0 4%, 100% 0%, 100% 100%, 0% 100%);
+  overflow: hidden;
+  font-family: sans-serif;
+}
+.site-footer::before {
+  content:'';
+  position:absolute; top:-40px; left:0; width:100%; height:40px;
+  background:#fff; border-radius:50% 50% 0 0; opacity:.1;
+}
+.footer-inner {
+  display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center;
+  width:90%; max-width:1200px; margin:0 auto; gap:1rem;
+  text-align:left;
+}
+.footer-inner span { font-size:1.5rem; font-weight:600; }
+.footer-logos { display:flex; gap:1.5rem; margin-top:.5rem; }
+.footer-logos img {
+  height:40px; filter: drop-shadow(0 2px 4px rgba(0,0,0,.4)) brightness(1.2);
+  transition: transform .3s ease, filter .3s ease;
+}
+.footer-logos img:hover { transform: translateY(-6px) scale(1.15); filter: drop-shadow(0 4px 8px rgba(0,0,0,.6)) brightness(1.4); }
+
+/* =========================
+   Mobile overrides (≤640px)
+   ========================= */
+@media (max-width: 640px){
+
+  /* Layout & containers: full-bleed */
+  .container{ width:100vw; max-width:100vw; margin:0; padding:0 12px; }
+  .calendar-container{
+    width:100vw; max-width:100vw; margin:0; padding:1rem 12px;
+    border-radius:0; box-shadow:none;
+  }
+
+  /* Header */
+  .header-inner{ padding:.5rem 0; }
+  .logo{ height:36px; }
+  .nav a{ margin-left:.75rem; font-size:.8rem; }
+  .btn, button{ max-width:100%; }
+
+  /* Month header controls */
+  .header-month{ margin-bottom:.5rem; }
+  .month-year{ font-size:1.1rem; }
+  .nav-btn{ font-size:1.35rem; }
+
+  /* Calendar table sizing */
+  #calendar{ table-layout:fixed; }
+  #calendar th, #calendar td{
+    height:40px; padding:.15rem; font-size:.8rem;
+  }
+  #calendar th{ white-space:nowrap; }
+  #calendar td[data-date]{ touch-action:manipulation; }
+
+  /* Activity list items stack */
+  .activity-item{
+    flex-direction:column; align-items:flex-start;
+    gap:.5rem; padding:.75rem .9rem; width:100%; border-radius:.9rem;
+  }
+  .activity-list{ margin-left:0; margin-right:0; }
+  .activity-when{ font-size:1rem; }
+  .activity-meta{ flex-wrap:wrap; }
+  .activity-actions{ width:100%; align-self:stretch; }
+  .activity-actions .btn, .activity-actions button{
+    display:block; width:100%; margin-left:0; padding:.65rem .9rem;
+  }
+
+  /* Ensure cards don't overflow and text wraps nicely */
+  .activity-item{ max-width:100%; overflow:hidden; }
+  .activity-item > *{ min-width:0; }
+  .activity-info{ flex:1; min-width:0; word-wrap:break-word; }
+
+  /* Blocked day look still legible on dark bg */
+  .activity-item.is-blocked{ background:#111827; color:#e5e7eb; }
+
+  /* Modal card & form */
+  .modal-card{
+    width:100vw; max-width:100vw; padding:1rem 12px; border-radius:0;
+  }
+  .modal-title{ font-size:1.1rem; }
+  .modal-close{ right:.5rem; top:.4rem; }
+
+  .form-container{
+    width:92vw; max-width:92vw; padding:16px; border-radius:10px;
+    position:relative; transform:none; left:auto; top:auto; margin:0 auto;
+  }
+  .form-container .buttons{ gap:.5rem; }
+  .form-container .buttons button{ padding:.7rem 0; font-size:.95rem; }
+
+  /* Footer no overlay y full-bleed */
+  .site-header, .site-footer{ left:0; right:0; width:100vw; }
+  .site-footer{
+    position:static;
+    clip-path: polygon(0 3%, 100% 0%, 100% 100%, 0% 100%);
+    padding:1.5rem 0;
+  }
+  .footer-inner{
+    gap:1rem; text-align:center; flex-direction:column;
+  }
+  .footer-logos img{ height:32px; }
+
+  /* Tap targets */
+  button, .nav a{ min-height:40px; }
 }

@@ -17,11 +17,11 @@
 
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
+html, body{ max-width:100%; overflow-x:hidden; }
 body{
   font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
   color:var(--text);
   display:flex;flex-direction:column;margin:0;
-  padding-bottom:88px; /* espacio para footer fijo */
 }
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
@@ -192,9 +192,9 @@ a{color:inherit;text-decoration:none}
 
 /* Footer */
 .site-footer{
-  position:fixed;left:0;bottom:0;width:100%;
+  position:static;left:auto;bottom:auto;width:100%;
   background:linear-gradient(90deg,var(--brand-green-dark),#1b5e20);
-  color:#e0f2f1;padding:.85rem 0;box-shadow:0 -4px 8px rgba(0,0,0,.3);z-index:1000
+  color:#e0f2f1;padding:.85rem 0;box-shadow:0 -4px 8px rgba(0,0,0,.3);
 }
 .footer-inner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem}
 .footer-inner span{font-size:1.1rem;font-weight:700}
@@ -456,8 +456,34 @@ a{color:inherit;text-decoration:none}
 .activity-planners{ color:var(--muted); }
 .activity-actions{ flex-shrink:0; }
 
+/* Anti-overflow (Planificar) */
+.activity-item{ max-width:100%; width:100%; overflow:hidden; }
+.activity-item > *{ min-width:0; }
+.activity-info{ flex:1; min-width:0; word-wrap:break-word; }
+.activity-actions{ width:100%; margin-left:0; }
+
+.activity-actions .btn, .activity-actions button{
+  display:block; width:100%; max-width:100%;
+}
+
+/* Estado: actividad bloqueada (más oscuro y gris) */
+.activity-item.is-blocked{
+  background:#2f2f2f;           /* gris oscuro */
+  color:#e5e7eb;                 /* texto gris muy claro */
+  filter:grayscale(.2);
+}
+.activity-item.is-blocked .activity-when{ color:#f3f4f6; }
+.activity-item.is-blocked .activity-planners{ color:#cbd5e1; }
+.activity-item.is-blocked .pill{ background:#374151; color:#e5e7eb; }
+.activity-item.is-blocked .btn,
+.activity-item.is-blocked button{
+  background:#6b7280 !important; /* gris medio para botones deshabilitados */
+  cursor:not-allowed;
+  box-shadow:none;
+}
+
 /* ===== Modal básico ===== */
-.modal{ position:fixed; inset:0; display:none; }
+.modal{ position:fixed; inset:0; display:none; z-index:2000; }
 .modal.open{ display:block; }
 .modal-backdrop{
   position:absolute; inset:0; background:rgba(0,0,0,.45); backdrop-filter: blur(2px);
@@ -472,4 +498,41 @@ a{color:inherit;text-decoration:none}
 .modal-close{
   position:absolute; right:.75rem; top:.5rem; border:0; background:transparent;
   font-size:1.5rem; cursor:pointer; line-height:1;
+}
+
+@media (max-width:640px){
+  .footer-inner{flex-direction:column;text-align:center}
+}
+
+@media (max-width: 640px){
+  /* Contenedor a pantalla completa con respiración lateral */
+  .container{ width:100vw; max-width:100vw; margin:0; padding:0 12px; }
+
+  /* Lista/ítems Responsive */
+  .list-item,
+  .activity-item{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:.6rem;
+    width:100%;
+    border-radius:.9rem;
+  }
+  .activity-when{ font-size:1rem; }
+  .activity-meta{ flex-wrap:wrap; }
+  .activity-actions{ width:100%; align-self:stretch; }
+  .activity-actions .btn, .activity-actions button{
+    display:block; width:100%; margin-left:0; padding:.65rem .9rem;
+  }
+
+  /* Modal ocupa ancho completo */
+  .modal-card{
+    width:100vw; max-width:100vw;
+    padding:1rem 12px; border-radius:0;
+  }
+
+  /* Footer no tapa contenido y full-bleed */
+  .site-footer{
+    position:static;
+    padding:1.25rem 0;
+  }
 }

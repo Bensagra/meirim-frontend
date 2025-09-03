@@ -64,17 +64,12 @@ async function fetchUpcomingActivities(){
 }
 
 function normalizeActivity(a){
-  // fuerza 18:20 y normaliza arrays a lo que consume el front
   const fecha = fixTime1820(a?.fecha);
 
-  // participants viene como ActivityUser[] con include { user: true }
-  // lo reducimos a un array de objetos Usuario [{name,surname,dni,...}]
   const participants = Array.isArray(a?.participants)
     ? a.participants.map(p => p?.user).filter(Boolean)
     : [];
 
-  // tematicas viene como ActivityTematica[] con include { tematica: true }
-  // lo reducimos a un array de strings con el nombre de la temática
   const topics = Array.isArray(a?.tematicas)
     ? a.tematicas
         .map(t => (t?.tematica && (t.tematica.tematica || t.tematica.name || t.tematica.titulo || t.tematica.title)) || t?.tematica)
@@ -86,7 +81,8 @@ function normalizeActivity(a){
     fecha,
     participants,
     topics,
-    estado: a?.estado || 'NO_HAY_NADIE'
+    estado: a?.estado || 'NO_HAY_NADIE',
+    blocked: Boolean(a?.blocked)   // 👈 NUEVO
   };
 }
 
@@ -107,7 +103,7 @@ function renderUpcoming(items){
     return;
   }
   listEl.innerHTML = items.map(act => {
-    const when = formatDateTime(act.fecha); // ya tiene 18:20 fijado
+    const when = formatDateTime(act.fecha);
     const pillClass = statusPillMap[act.estado] || 'pill-info';
 
     const displayNames = (act.participants || []).map(u => {
@@ -122,27 +118,41 @@ function renderUpcoming(items){
     const extra = displayNames.length > 3 ? ` +${displayNames.length-3}` : '';
     const planners = displayNames.length ? `${names}${extra}` : '—';
 
+    // 👇 NUEVO: clases y botón según blocked
+    const liClass = `activity-item${act.blocked ? ' is-blocked' : ''}`;
+    const btnAttrs = act.blocked ? 'disabled aria-disabled="true"' : '';
+    const btnLabel = act.blocked ? 'Bloqueado' : 'Planificar acá';
+
     return `
-      <li class="activity-item">
+      <li class="${liClass}">
         <div class="activity-info">
           <div class="activity-when">${when}</div>
           <div class="activity-meta">
             <span class="pill ${pillClass}">${labelEstado(act.estado)}</span>
             <span class="activity-planners"><strong>Planifican:</strong> ${escapeHtml(planners)}</span>
+            ${act.blocked ? '<span class="pill pill-blocked" title="Este día está bloqueado">Bloqueado</span>' : ''}
           </div>
         </div>
         <div class="activity-actions">
-          <button class="btn btn-green" data-plan="${act.id}">Planificar acá</button>
+          <button class="btn btn-green" data-plan="${act.id}" ${btnAttrs}>${btnLabel}</button>
         </div>
       </li>
     `;
   }).join('');
 
+  // Handlers
   listEl.querySelectorAll('button[data-plan]').forEach(btn => {
     btn.addEventListener('click', () => {
       const id = btn.getAttribute('data-plan');
       const act = upcoming.find(a => String(a.id) === String(id));
-      if (act) openModal(act);
+      // 👇 NUEVO: bloqueado no abre modal
+      if (!act) return;
+      if (act.blocked) {
+        // opcional: feedback
+        alert('Este día está bloqueado para planificación.');
+        return;
+      }
+      openModal(act);
     });
   });
 }
@@ -203,13 +213,17 @@ async function onSubmitPlan(e){
   e.preventDefault();
   if (!currentActivity) return;
 
+  // 👇 NUEVO: guardrail por seguridad
+  if (currentActivity.blocked) {
+    alert('Este día está bloqueado para planificación.');
+    return;
+  }
+
   const dni = dniEl.value.trim();
   if (!dni) return alert('Ingresá tu DNI');
 
-  // verificar usuario
   const exists = await userExists(dni);
   if (!exists){
-    // abrir paso de registro con DNI precargado
     formEl.style.display = 'none';
     regFormEl.style.display = 'grid';
     regDniEl.value = dni;
@@ -217,7 +231,6 @@ async function onSubmitPlan(e){
     return;
   }
 
-  // continuar guardado
   const topic = getChosenTopic();
   if (!topic) return;
 

@@ -1,9 +1,9 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin · Actividades BBYO</title>
-  <link rel="stylesheet" href="planificar.css" />
   <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
@@ -21,57 +21,7 @@
 
   <main class="calendar-container">
     <h2>Listado de Actividades</h2>
-
-    <!-- Filtros -->
-    <section class="filters-row">
-      <div class="filters-grid">
-        <label>Chapter
-          <select id="chapterSelect" class="select">
-            <option value="meirim">Meirim</option>
-            <option value="aza">AZA</option>
-            <option value="bbg">BBG</option>
-            <option value="argentina">Argentina</option>
-          </select>
-        </label>
-        <label>Desde
-          <input id="dateFrom" type="date" />
-        </label>
-        <label>Hasta
-          <input id="dateTo" type="date" />
-        </label>
-        <label>Buscar
-          <input id="searchText" type="search" placeholder="Notas, texto…" />
-        </label>
-        <label>Estado
-          <select id="statusSelect">
-            <option value="">Todos</option>
-            <option value="NO_HAY_NADIE">No hay nadie</option>
-            <option value="HAY_GENTE_PERO_NO_NECESARIA">Hay gente pero no la necesaria</option>
-            <option value="YA_HAY_GENTE_PERO_NO_SE_PLANIFICO">Hay gente, no se planificó</option>
-            <option value="FUE_PLANIFICADA">Planificada</option>
-            <option value="FUE_DADA_LA_PLANIFICACION">Planificación entregada</option>
-          </select>
-        </label>
-        <label>Cant.
-          <select id="takeSelect">
-            <option>12</option>
-            <option>24</option>
-            <option selected>48</option>
-          </select>
-        </label>
-        <button id="applyFilters" class="btn btn-aza">Aplicar</button>
-        <button id="clearFilters" class="btn btn-bbg">Limpiar</button>
-      </div>
-    </section>
-
     <div id="activitiesList" class="activities-list" aria-live="polite"></div>
-
-    <!-- Paginación -->
-    <div class="pager">
-      <button class="btn btn-secondary" id="prevPage">‹ Anterior</button>
-      <span id="pageInfo" class="page-info"></span>
-      <button class="btn btn-secondary" id="nextPage">Siguiente ›</button>
-    </div>
   </main>
 
   <footer class="site-footer">
