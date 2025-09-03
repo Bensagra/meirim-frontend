@@ -1,6 +1,6 @@
 
 (function(){
-  const BASE_URL = '/api';
+const BASE_URL       = 'https://meirim-backend.vercel.app';
   const ACTIVITIES_API = `${BASE_URL}/activities`;
 
   const container = document.getElementById('activitiesList');
