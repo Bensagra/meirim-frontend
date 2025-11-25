@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#72bf44"/>
+  <title>Votación - 100 Meirimers Dicen</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="meirimers100.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="./index.html" class="brand" aria-label="Inicio Meirim BBYO">
+        <img src="images/bbyo.png" alt="Meirim BBYO" class="logo" />
+      </a>
+
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="primary-nav">
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+      </button>
+
+      <nav class="nav" id="primary-nav" role="navigation">
+        <a href="./index.html">Inicio</a>
+        <a href="./planificar.html">Actividades</a>
+        <a href="./banco.html">Banco de Ideas</a>
+        <a href="./penpals.html">PenPals</a>
+        <a href="./nominaciones.html">Nominaciones</a>
+        <a href="./meirimers100-votar.html" class="active">100 Meirimers</a>
+        <a href="./tienda.html">Tienda</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="site-main">
+    <div class="container">
+      <div class="page-header">
+        <h1>🎮 100 Meirimers Dicen</h1>
+        <p class="subtitle">Responde las preguntas de forma anónima</p>
+        <div class="game-nav">
+          <a href="./meirimers100-votar.html" class="btn btn-pink">Votar</a>
+          <a href="./meirimers100-juego.html" class="btn btn-green">Jugar</a>
+        </div>
+      </div>
+
+      <!-- Login Section -->
+      <div id="loginSection" class="login-section">
+        <div class="card centered">
+          <h2>Ingresa tu nombre o apodo</h2>
+          <p>Tus respuestas serán anónimas, solo necesitamos identificarte para evitar duplicados</p>
+          <form id="loginForm">
+            <div class="form-group">
+              <input 
+                type="text" 
+                id="nombreInput" 
+                placeholder="Tu nombre o apodo" 
+                required 
+                minlength="2"
+              />
+            </div>
+            <button type="submit" class="btn btn-green">Comenzar a Responder</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Voting Section -->
+      <div id="votingSection" class="voting-section" style="display: none;">
+        <div class="user-info">
+          <p>Respondiendo como: <strong id="userNombre"></strong></p>
+          <button id="logoutBtn" class="btn-text">Cambiar nombre</button>
+        </div>
+
+        <div id="preguntasContainer" class="preguntas-container">
+          <!-- Las preguntas se cargarán dinámicamente -->
+        </div>
+
+        <div class="actions">
+          <button id="finalizarBtn" class="btn btn-green" style="display: none;">¡Listo! Ver Juego</button>
+        </div>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Cargando...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>Meirim Chapter 1</span>
+      <div class="footer-logos">
+        <img src="images/aza.jpg"  alt="AZA Logo" />
+        <img src="images/bbg.png" alt="BBG Logo" />
+        <img src="images/bbyo.png" alt="BBYO Logo"/>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="meirimers100-votar.js"></script>
+</body>
+</html>
