@@ -2,12 +2,16 @@ const API_URL = 'https://meirim-backend.vercel.app/api';
 
 let preguntaActual = null;
 let ordenActual = []; // Array de IDs en el orden actual
+let vidasRestantes = 2;
+let intentoActual = 1;
 
 document.addEventListener('DOMContentLoaded', () => {
   cargarPregunta();
   
   document.getElementById('verificarBtn').addEventListener('click', comprobarOrden);
-  document.getElementById('siguientePregunta').addEventListener('click', cargarPregunta);
+  document.getElementById('siguientePregunta').addEventListener('click', () => {
+    cargarPregunta();
+  });
 });
 
 async function cargarPregunta() {
@@ -16,7 +20,13 @@ async function cargarPregunta() {
     const gameDiv = document.getElementById('juegoSection');
     const resultadosDiv = document.getElementById('resultadosSection');
     
+    // Resetear vidas y mostrar secciones
+    vidasRestantes = 2;
+    intentoActual = 1;
+    actualizarVidasDisplay();
+    
     loadingDiv.style.display = 'none';
+    gameDiv.querySelector('.game-board').style.display = 'block';
     gameDiv.style.display = 'block';
     resultadosDiv.style.display = 'none';
     
@@ -48,6 +58,13 @@ async function cargarPregunta() {
   } catch (error) {
     console.error('Error:', error);
     alert('Error al cargar la pregunta. Por favor intenta de nuevo.');
+  }
+}
+
+function actualizarVidasDisplay() {
+  const vidasDisplay = document.getElementById('vidasDisplay');
+  if (vidasDisplay) {
+    vidasDisplay.textContent = '❤️ '.repeat(vidasRestantes) + '🖤 '.repeat(2 - vidasRestantes);
   }
 }
 
@@ -166,12 +183,43 @@ async function comprobarOrden() {
     }
     
     const resultado = await response.json();
-    mostrarResultados(resultado);
+    
+    // Si acertó todo o se acabaron las vidas, mostrar resultados finales
+    if (resultado.porcentaje === 100 || vidasRestantes === 1) {
+      mostrarResultados(resultado);
+    } else {
+      // Tiene otra oportunidad
+      vidasRestantes--;
+      intentoActual++;
+      actualizarVidasDisplay();
+      mostrarFeedbackParcial(resultado);
+    }
     
   } catch (error) {
     console.error('Error:', error);
     alert('Error al verificar el orden. Por favor intenta de nuevo.');
   }
+}
+
+function mostrarFeedbackParcial(resultado) {
+  // Marcar opciones correctas/incorrectas sin mostrar la respuesta
+  const items = document.querySelectorAll('.opcion-item');
+  
+  resultado.resultados.forEach(res => {
+    const item = document.querySelector(`.opcion-item[data-opcion-id="${res.opcionId}"]`);
+    if (item) {
+      // Limpiar clases previas
+      item.classList.remove('correcto-parcial', 'incorrecto-parcial');
+      
+      if (res.correcto) {
+        item.classList.add('correcto-parcial');
+      } else {
+        item.classList.add('incorrecto-parcial');
+      }
+    }
+  });
+  
+  alert(`¡Tienes ${vidasRestantes} vida${vidasRestantes > 1 ? 's' : ''} más! Reordena las opciones marcadas en rojo.`);
 }
 
 function mostrarResultados(resultado) {

@@ -9,6 +9,12 @@
   --game-answer-bg: #0f172a;
 }
 
+/* Fix footer overlap */
+.site-main {
+  min-height: calc(100vh - 200px);
+  padding-bottom: 4rem;
+}
+
 /* Common Styles */
 .page-header {
   text-align: center;
@@ -306,6 +312,23 @@
 .opcion-item.dragging {
   opacity: 0.5;
   transform: scale(0.95);
+}
+
+.opcion-item.correcto-parcial {
+  border-color: var(--game-success);
+  background: rgba(22, 163, 74, 0.1);
+}
+
+.opcion-item.incorrecto-parcial {
+  border-color: var(--game-secondary);
+  background: rgba(220, 38, 38, 0.1);
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
 }
 
 .opcion-numero {
