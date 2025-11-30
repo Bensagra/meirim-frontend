@@ -29,7 +29,7 @@
         <a href="./banco.html">Banco de Ideas</a>
         <a href="./penpals.html">PenPals</a>
         <a href="./nominaciones.html">Nominaciones</a>
-        <a href="./meirimers100-votar.html">100 Meirimers</a>
+        <a href="./meirimers100-juego.html">100 Meirimers</a>
         <a href="./tienda.html">Tienda</a>
       </nav>
     </div>
@@ -54,46 +54,16 @@
           <p class="stat-number" id="preguntasActivas">0</p>
         </div>
         <div class="stat-card">
-          <h3>Preguntas Bloqueadas</h3>
-          <p class="stat-number" id="preguntasBloqueadas">0</p>
-        </div>
-        <div class="stat-card">
-          <h3>Total Respuestas</h3>
-          <p class="stat-number" id="totalRespuestas">0</p>
-        </div>
-        <div class="stat-card">
-          <h3>Votantes Únicos</h3>
-          <p class="stat-number" id="votantesUnicos">0</p>
+          <h3>Total Opciones</h3>
+          <p class="stat-number" id="totalOpciones">0</p>
         </div>
       </div>
 
-      <!-- Crear Nueva Pregunta -->
+      <!-- Inicializar Datos -->
       <div class="card">
-        <h2>➕ Crear Nueva Pregunta</h2>
-        <form id="crearPreguntaForm">
-          <div class="form-group">
-            <label for="nuevaPregunta">Pregunta:</label>
-            <input 
-              type="text" 
-              id="nuevaPregunta" 
-              placeholder="Ejemplo: ¿Qué cosa nunca falta en un campamento?" 
-              required 
-            />
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="nuevoOrden">Orden:</label>
-              <input type="number" id="nuevoOrden" value="0" />
-            </div>
-            <div class="form-group checkbox-group">
-              <label>
-                <input type="checkbox" id="nuevaActiva" checked />
-                Activa (visible para votar)
-              </label>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-green">Crear Pregunta</button>
-        </form>
+        <h2>🚀 Inicializar Datos</h2>
+        <p>Carga las 7 preguntas predefinidas con sus opciones (esto eliminará todas las preguntas existentes).</p>
+        <button id="btnInicializar" class="btn btn-green">Inicializar Preguntas</button>
       </div>
 
       <!-- Lista de Preguntas -->

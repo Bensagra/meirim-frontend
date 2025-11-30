@@ -42,11 +42,7 @@
       <div id="selectorSection" class="selector-section">
         <div class="page-header">
           <h1>🎮 100 Meirimers Dicen</h1>
-          <p class="subtitle">Selecciona una pregunta para jugar</p>
-          <div class="game-nav">
-            <a href="./meirimers100-votar.html" class="btn btn-pink">Votar</a>
-            <a href="./meirimers100-juego.html" class="btn btn-green">Jugar</a>
-          </div>
+          <p class="subtitle">Ordena las opciones de mayor a menor popularidad</p>
         </div>
 
         <div id="preguntasList" class="preguntas-list">
@@ -57,50 +53,39 @@
       <!-- Juego -->
       <div id="juegoSection" class="juego-section" style="display: none;">
         
-        <!-- Board estilo Family Feud -->
+        <!-- Board estilo ordenamiento -->
         <div class="game-board">
           <div class="question-display">
             <h2 id="preguntaActual"></h2>
-            <div class="total-respuestas">
-              <span id="totalRespuestas">0</span> respuestas
-            </div>
+            <p class="instrucciones">Arrastra las opciones para ordenarlas de más a menos popular</p>
           </div>
 
-          <div class="answers-board" id="answersBoard">
-            <!-- Las respuestas descubiertas aparecerán aquí -->
-          </div>
-
-          <div class="input-section">
-            <form id="respuestaForm">
-              <input 
-                type="text" 
-                id="respuestaInput" 
-                placeholder="Escribe tu respuesta..." 
-                autocomplete="off"
-              />
-              <button type="submit" class="btn btn-green">Enviar</button>
-            </form>
-            <button id="revelarTodas" class="btn btn-secondary">Revelar Todas</button>
-          </div>
-
-          <div class="game-stats">
-            <div class="stat">
-              <span class="stat-label">Correctas:</span>
-              <span class="stat-value" id="correctasCount">0</span>
-            </div>
-            <div class="stat">
-              <span class="stat-label">Intentos:</span>
-              <span class="stat-value" id="intentosCount">0</span>
-            </div>
-            <div class="stat incorrectas">
-              <span class="stat-label">❌</span>
-              <span class="stat-value" id="incorrectasDisplay">0/3</span>
+          <div class="ordenamiento-container">
+            <div class="ordenamiento-list" id="opcionesList">
+              <!-- Las opciones se cargarán aquí para ordenar -->
             </div>
           </div>
 
           <div class="game-actions">
-            <button id="volverBtn" class="btn btn-pink">Volver al menú</button>
-            <button id="siguientePregunta" class="btn btn-green" style="display: none;">Siguiente Pregunta</button>
+            <button id="verificarBtn" class="btn btn-green btn-large">Comprobar Orden</button>
+            <button id="volverBtn" class="btn btn-secondary">Volver al menú</button>
+          </div>
+        </div>
+
+        <!-- Resultados -->
+        <div id="resultadosSection" class="resultados-section" style="display: none;">
+          <div class="resultados-header">
+            <h2>📊 Resultados</h2>
+            <p id="puntajeTexto"></p>
+          </div>
+
+          <div id="resultadosList" class="resultados-list">
+            <!-- Los resultados se mostrarán aquí -->
+          </div>
+
+          <div class="game-actions">
+            <button id="volverMenuBtn" class="btn btn-pink">Volver al menú</button>
+            <button id="siguientePregunta" class="btn btn-green">Siguiente Pregunta</button>
           </div>
         </div>
 
