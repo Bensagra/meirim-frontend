@@ -26,15 +26,15 @@ async function cargarPregunta() {
       throw new Error('Error al cargar pregunta');
     }
     
-    const data = await response.json();
+    const preguntas = await response.json();
     
-    if (!data.preguntas || data.preguntas.length === 0) {
+    if (!preguntas || preguntas.length === 0) {
       alert('No hay preguntas disponibles');
       return;
     }
     
     // Seleccionar pregunta aleatoria
-    preguntaActual = data.preguntas[Math.floor(Math.random() * data.preguntas.length)];
+    preguntaActual = preguntas[Math.floor(Math.random() * preguntas.length)];
     
     // Mezclar opciones para el juego
     const opcionesMezcladas = [...preguntaActual.opciones].sort(() => Math.random() - 0.5);
