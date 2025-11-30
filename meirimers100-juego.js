@@ -6,19 +6,19 @@ let ordenActual = []; // Array de IDs en el orden actual
 document.addEventListener('DOMContentLoaded', () => {
   cargarPregunta();
   
-  document.getElementById('btnComprobar').addEventListener('click', comprobarOrden);
-  document.getElementById('btnNuevaPregunta').addEventListener('click', cargarPregunta);
+  document.getElementById('verificarBtn').addEventListener('click', comprobarOrden);
+  document.getElementById('siguientePregunta').addEventListener('click', cargarPregunta);
 });
 
 async function cargarPregunta() {
-  try {
-    const loadingDiv = document.getElementById('loading');
-    const gameDiv = document.getElementById('game');
-    const resultadosDiv = document.getElementById('resultados');
+  try{
+    const loadingDiv = document.getElementById('loadingSpinner');
+    const gameDiv = document.getElementById('juegoSection');
+    const resultadosDiv = document.getElementById('resultadosSection');
     
-    loadingDiv.classList.remove('hidden');
-    gameDiv.classList.add('hidden');
-    resultadosDiv.classList.add('hidden');
+    loadingDiv.style.display = 'none';
+    gameDiv.style.display = 'block';
+    resultadosDiv.style.display = 'none';
     
     const response = await fetch(`${API_URL}/100meirimers/preguntas`);
     
@@ -42,8 +42,8 @@ async function cargarPregunta() {
     
     mostrarPregunta(preguntaActual, opcionesMezcladas);
     
-    loadingDiv.classList.add('hidden');
-    gameDiv.classList.remove('hidden');
+    loadingDiv.style.display = 'none';
+    gameDiv.style.display = 'block';
     
   } catch (error) {
     console.error('Error:', error);
@@ -52,9 +52,9 @@ async function cargarPregunta() {
 }
 
 function mostrarPregunta(pregunta, opciones) {
-  document.getElementById('preguntaTexto').textContent = pregunta.pregunta;
+  document.getElementById('preguntaActual').textContent = pregunta.pregunta;
   
-  const listaOpciones = document.getElementById('listaOpciones');
+  const listaOpciones = document.getElementById('opcionesList');
   listaOpciones.innerHTML = '';
   
   opciones.forEach((opcion, index) => {
@@ -175,8 +175,8 @@ async function comprobarOrden() {
 }
 
 function mostrarResultados(resultado) {
-  document.getElementById('game').classList.add('hidden');
-  document.getElementById('resultados').classList.remove('hidden');
+  document.getElementById('juegoSection').querySelector('.game-board').style.display = 'none';
+  document.getElementById('resultadosSection').style.display = 'block';
   
   const porcentaje = Math.round(resultado.porcentaje);
   let mensaje = '';
@@ -198,7 +198,7 @@ function mostrarResultados(resultado) {
     Acertaste ${resultado.correctas} de ${resultado.total} (${porcentaje}%)
   `;
   
-  const listaResultados = document.getElementById('listaResultados');
+  const listaResultados = document.getElementById('resultadosList');
   listaResultados.innerHTML = '';
   
   // Ordenar resultados por posición correcta
